@@ -14,6 +14,8 @@ cd nttt
 pip3 install . --upgrade
 ```
 
+![install nttt](images/install_nttt.png)
+
 You can uninstall nttt using:
 
 ```bash
