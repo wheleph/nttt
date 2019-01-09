@@ -31,12 +31,15 @@ def fix_step(src, dst):
 
 def tidyup_translations(folder, output_folder):
 
+    # tidy up and get absolute paths
+    folder = folder.strip().rstrip(os.pathsep).rstrip('"')
+    folder = Path(folder).absolute()
+    output_folder = output_folder.strip().rstrip(os.pathsep).rstrip('"')
+    output_folder = Path(output_folder).absolute()
+
     if os.path.isdir(folder):
 
-        # get absolute paths
-        folder = Path(folder).absolute()
-        output_folder = Path(output_folder).absolute()
-
+        
         # get files to update
         if folder == output_folder:
             print("Using folder - {}".format(folder))
@@ -50,20 +53,22 @@ def tidyup_translations(folder, output_folder):
         if len(files_to_update) > 0:
             print("About to tidy up files:")
             for file in files_to_update:
-                #print(" - {}".format(os.path.basename(file)))
                 print(" - {}".format(file.replace(str(folder), "")))
             
             process_yn = input("Continue (y/n):")
             if process_yn.casefold() == "y":
 
-                # create output folder
-                if not os.path.exists(output_folder):
-                    os.makedirs(output_folder)
-
-
                 for source_file_path in files_to_update:
-                    file_name = os.path.basename(source_file_path)
-                    output_file_path = os.path.join(output_folder, file_name)
+                    print(source_file_path)
+                    file_name = source_file_path.replace(str(folder), "")
+
+                    output_file_path = str(output_folder) + file_name
+
+                    # create output folder
+                    output_file_folder = os.path.dirname(output_file_path)
+                    if not os.path.exists(output_file_folder):
+                        os.makedirs(output_file_folder)
+
                     print("Fixing - {}".format(file_name))
                     if os.path.basename(source_file_path) == "meta.yml":
                         fix_meta(source_file_path, output_file_path)
