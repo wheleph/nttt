@@ -11,7 +11,7 @@ else:
 
 __project__ = 'nttt'
 __desc__ = 'A utility for Nina to clean up translated projects'
-__version__ = '0.0.2'
+__version__ = '0.1.0'
 __author__ = "Martin O'Hanlon"
 __author_email__ = 'martin.ohanlon@raspberrypi.org'
 __url__ = 'https://github.com/raspberrypilearning/nttt'

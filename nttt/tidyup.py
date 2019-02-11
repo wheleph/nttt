@@ -1,26 +1,35 @@
-from .utilities import find_files, find_replace, find_snippet
+from .utilities import find_files, find_replace, find_snippet, get_file, save_file
 
 import os
 import os.path
+import re
 from pathlib import Path
 
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \r\n    title:", "  - title:")
 
 def fix_step(src, dst):
-    find_replace(src, dst, "\---", "---")
-    find_replace(dst, dst, "--- hints ---", "--- hints ---\r\n")
-    find_replace(dst, dst, " --- hint --- ", "--- hint ---\r\n")
-    find_replace(dst, dst, " --- /hint ---", "\r\n--- /hint ---\r\n")
-    find_replace(dst, dst, " --- /hints ---", "--- /hints ---")
-    find_replace(dst, dst, '{: target = " blank"}', '{:target="blank"}')
-    find_replace(dst, dst, "\n` ", "\n`")
-
-    collapse_error = "--- collapse ---\r\n\r\n* * *\r\n\r\n## title: "
-    collapse_title = find_snippet(dst, collapse_error, "\r\n")
+    content = get_file(src)
+    content = content.replace("\---", "---")
+    content = content.replace("## ---", "---")
+    content = content.replace("--- hints ---", "--- hints ---\r\n")
+    content = content.replace(" --- hint x--- ", "--- hint ---\r\n")
+    content = content.replace(" --- /hint ---", "\r\n--- /hint ---\r\n")
+    content = content.replace(" --- /hints ---", "--- /hints ---")
+    content = content.replace('{: target = " blank"}', '{:target="blank"}')
+    content = content.replace("\n` ", "\n`")
+    
+    collapse_error = "--- collapse ---\r\n\r\n## title: "
+    collapse_title = find_snippet(content, collapse_error, "\r\n")
     while collapse_title is not None:
-        find_replace(dst, dst, collapse_error + collapse_title + "\r\n", "--- collapse ---\r\n---\r\ntitle: " + collapse_title + "\r\n---\r\n")
-        collapse_title = find_snippet(dst, collapse_error, "\r\n")
+        content = content.replace(collapse_error + collapse_title + "\r\n", "--- collapse ---\r\n---\r\ntitle: " + collapse_title + "\r\n---\r\n")
+        collapse_title = find_snippet(content, collapse_error, "\r\n")
+
+    # update language in urls
+    lang = os.path.split(os.path.split(src)[0])[1]
+    content = content.replace("/en/", "/" + lang + "/")
+
+    save_file(dst, content)
 
     # doesnt work...  needs thinking about!
     # bold_text = find_snippet(dst, "** ", " **")
@@ -59,13 +68,14 @@ def tidyup_translations(folder, output_folder):
             if process_yn.casefold() == "y":
 
                 for source_file_path in files_to_update:
-                    print(source_file_path)
                     file_name = source_file_path.replace(str(folder), "")
 
                     output_file_path = str(output_folder) + file_name
-
+                    
                     # create output folder
                     output_file_folder = os.path.dirname(output_file_path)
+
+
                     if not os.path.exists(output_file_folder):
                         os.makedirs(output_file_folder)
 
