@@ -5,6 +5,8 @@ import os.path
 import re
 from pathlib import Path
 
+from .scratchblocks_translate import translate_blocks
+
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \r\n    title:", "  - title:")
 
@@ -85,7 +87,20 @@ def tidyup_translations(folder, output_folder):
                     else:
                         fix_step(source_file_path, output_file_path)
                 
-                print("Complete")
+            print("About to translate scratchblocks:")
+
+            trasnlate_scratchblocks_yn = input("Continue (y/n):")
+
+            if trasnlate_scratchblocks_yn.casefold() == "y":
+
+                target_folder = folder
+                target_language = str(os.path.split(target_folder)[1]).split('-')[0]
+
+                translate_blocks(target_folder, target_language)
+
+                print("Translated scratchblocks")
+
+            print("Complete")
                     
         else:
             print("No files found in '{}'".format(folder))
