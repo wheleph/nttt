@@ -146,11 +146,9 @@ def restore_modification_markers(code, modifier_characters):
 
     # Cover for an un-closed loop by adding some spaces to the modifiers:
     if len(modifier_characters) == len(code_list) - 1:
-
-        proxy_modifier = split(modifier_characters[0],"+ | -")[-1]
+        proxy_modifier = split(modifier_characters[0], "+ | -")[-1]
 
         modifier_characters.append(proxy_modifier)
-
 
     for line_number in range(0, len(code_list)):
         code_list[line_number] = "{}{}".format(modifier_characters[line_number], code_list[line_number])
@@ -211,7 +209,6 @@ def make_code_file(parent_directory, file_name, contents):
 
 
 def file_find_replace(file_path, text_pairs=[]):
-
     with open(file_path, "r") as file:
         file_text = file.read()
 
@@ -220,6 +217,14 @@ def file_find_replace(file_path, text_pairs=[]):
 
     with open(file_path, "w") as file:
         file.write(file_text)
+
+
+def get_markdown_filename(filepath, language_directory, snippet_number):
+    filename = str(filepath).replace(str(language_directory), "")
+
+    output_filename = filename.replace(".md", "").replace("/", "__")
+
+    return "{}_block_{}.txt".format(output_filename, snippet_number)
 
 
 # Main translation method
@@ -258,10 +263,7 @@ def translate_blocks(language_directory, language):
                 markdown_list[-2]
             )
 
-            markdown_filename = "file_{}_block_{}.txt".format(
-                file_number + 1,
-                snippet_number + 1
-            )
+            markdown_filename = get_markdown_filename(files[file_number], language_directory, snippet_number)
 
             make_code_file(
                 translation_directories["source"],
