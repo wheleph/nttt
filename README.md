@@ -22,6 +22,20 @@ You can uninstall nttt using:
 pip3 uninstall nttt
 ```
 
+### scratchblocks translations - chrome driver
+
+To use the scratchblocks auto translations you will also need to install the [selenium](https://pypi.org/project/selenium/) chrome driver.
+
+1. Download the chrome driver from [sites.google.com/a/chromium.org/chromedriver/downloads](https://sites.google.com/a/chromium.org/chromedriver/downloads).
+
+![chrome driver](images/chrome_driver1.png)
+
+![chrome driver](images/chrome_driver2.png)
+
+2. Open the zip file and copy the `chromedriver.exe` to `C:\Windows`.
+
+![chrome driver](images/chrome_driver3.png)
+
 ## Usage
 
 NTTT is a command line tool, called using `nttt`.

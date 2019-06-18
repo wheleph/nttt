@@ -178,7 +178,8 @@ def fetch_translated_code(browser, english_code, target_language_iso_code):
 def make_directory(directory_path):
     try:
         os.mkdir(directory_path)
-    except OSError:
+    except OSError as e:
+        print(e)
         print("Creation of directory %s failed" % directory_path)
 
 
