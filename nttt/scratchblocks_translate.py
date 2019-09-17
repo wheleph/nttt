@@ -179,8 +179,7 @@ def make_directory(directory_path):
     try:
         os.mkdir(directory_path)
     except OSError as e:
-        print(e)
-        print("Creation of directory %s failed" % directory_path)
+        print("Directory {} already exists. Using existing directory.".format(directory_path))
 
 
 def make_translation_directories(base_language_directory):
@@ -203,27 +202,29 @@ def make_translation_directories(base_language_directory):
 
 
 def make_code_file(parent_directory, file_name, contents):
+    file_name = file_name.lstrip("/").lstrip("\\")
+
     file_path = os.path.join(parent_directory, file_name)
 
-    with open(file_path, "w") as file:
+    with open(file_path, "w", encoding="utf-8") as file:
         file.write(contents)
 
 
 def file_find_replace(file_path, text_pairs=[]):
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         file_text = file.read()
 
     for pair in text_pairs:
         file_text = file_text.replace(pair[0], pair[1])
 
-    with open(file_path, "w") as file:
+    with open(file_path, "w", encoding="utf-8") as file:
         file.write(file_text)
 
 
 def get_markdown_filename(filepath, language_directory, snippet_number):
     filename = str(filepath).replace(str(language_directory), "")
 
-    output_filename = filename.replace(".md", "").replace("/", "__")
+    output_filename = filename.replace(".md", "").replace("/", "")
 
     return "{}_block_{}.txt".format(output_filename, snippet_number)
 

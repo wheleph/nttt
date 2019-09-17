@@ -32,3 +32,6 @@ coverage
 
 # Generated documentation
 docs/_build
+
+# Mac OS 
+.DS_Store
