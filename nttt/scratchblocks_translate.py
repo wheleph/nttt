@@ -206,18 +206,18 @@ def make_code_file(parent_directory, file_name, contents):
 
     file_path = os.path.join(parent_directory, file_name)
 
-    with open(file_path, "w", encoding="utf-8") as file:
+    with open(file_path, "w") as file:
         file.write(contents)
 
 
 def file_find_replace(file_path, text_pairs=[]):
-    with open(file_path, "r", encoding="utf-8") as file:
+    with open(file_path, "r") as file:
         file_text = file.read()
 
     for pair in text_pairs:
         file_text = file_text.replace(pair[0], pair[1])
 
-    with open(file_path, "w", encoding="utf-8") as file:
+    with open(file_path, "w") as file:
         file.write(file_text)
 
 
