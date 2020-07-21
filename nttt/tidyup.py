@@ -13,7 +13,7 @@ def fix_step(src, dst):
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
     content = content.replace("--- hints ---", "--- hints ---\r\n")
-    content = content.replace(" --- hint x--- ", "--- hint ---\r\n")
+    content = content.replace(" --- hint --- ", "--- hint ---\r\n")
     content = content.replace(" --- /hint ---", "\r\n--- /hint ---\r\n")
     content = content.replace(" --- /hints ---", "--- /hints ---")
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
