@@ -14,15 +14,16 @@ class TestEol(unittest.TestCase):
             "steps:\r\n"
             "  - title: Inleiding\r\n")
 
-    # def test_fix_metadata_lf(self):
-    #     self.helper_test_fix_metadata(
-    #                       "---\n"
-    #                       "steps:\n"
-    #                       "  - \n"
-    #                       "    title: Inleiding\n",
-    #                       "---\n"
-    #                       "steps:\n"
-    #                       "  - title: Inleiding\n")
+    @unittest.skip("should be fixed later")
+    def test_fix_metadata_lf(self):
+        self.helper_test_fix_metadata(
+                          "---\n"
+                          "steps:\n"
+                          "  - \n"
+                          "    title: Inleiding\n",
+                          "---\n"
+                          "steps:\n"
+                          "  - title: Inleiding\n")
 
     def helper_test_fix_metadata(self, input_file_content, expected_output_file_content):
         with tempfile.NamedTemporaryFile(mode="wb") as temp_src, \
