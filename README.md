@@ -11,6 +11,7 @@ To install NTTT, clone the repository and use `pip3` to install:
 ```bash
 git clone https://github.com/raspberrypilearning/nttt
 cd nttt
+pip3 install -r requirements.txt
 pip3 install . --upgrade
 ```
 
