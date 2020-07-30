@@ -1,6 +1,6 @@
 import unittest
 import nttt
-from unit_test.test_utilities import CustomTemporaryFile
+from unit_test.test_utilities import CustomNamedTemporaryFile
 
 
 class TestEol(unittest.TestCase):
@@ -54,8 +54,8 @@ class TestEol(unittest.TestCase):
         - Run the given function (that takes as arguments names of input and output files)
         - Assert that the output file has the expected content
         """
-        with CustomTemporaryFile(mode="wb", delete=True) as temp_src, \
-                CustomTemporaryFile(mode="rb", delete=True) as temp_dest:
+        with CustomNamedTemporaryFile(mode="wb", delete=True) as temp_src, \
+                CustomNamedTemporaryFile(mode="rb", delete=True) as temp_dest:
             temp_src.write(input_file_content.encode('utf-8'))
             temp_src.flush()
 
