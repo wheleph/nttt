@@ -1,9 +1,8 @@
 import sys
-sys.path.insert(1, '../nttt/')
+sys.path.insert(1, '../')
 
 import unittest
-#import nttt
-import utilities
+import nttt
 
 
 class TestPub9(unittest.TestCase):
@@ -12,7 +11,7 @@ class TestPub9(unittest.TestCase):
         c_initial = 'asd _ fgh _ asd ` ghj ` asd ** hjk ** asd * uio * asd'
         c_target = 'asd _fgh_ asd `ghj` asd **hjk** asd *uio* asd'
         
-        self.assertEqual(utilities.trim_pub_9(c_initial), c_target)
+        self.assertEqual(nttt.utilities.trim_pub_9(c_initial), c_target)
     
 
 
