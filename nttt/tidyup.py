@@ -1,5 +1,5 @@
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
-
+from .utilities import trim_pub_9
 import os
 import os.path
 import re
@@ -18,6 +18,7 @@ def fix_step(src, dst):
     content = content.replace(" --- /hints ---", "--- /hints ---")
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
+    content = trim_pub_9(content)
     
     collapse_error = "--- collapse ---\r\n\r\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\r\n")
