@@ -2,6 +2,7 @@ from shutil import copy2, copystat, Error, ignore_patterns
 import os
 import os.path
 import codecs
+import re
 
 def get_file(file_name):
     with codecs.open(file_name, encoding='utf-8') as f:
@@ -54,3 +55,28 @@ def find_files(src, file_names=[], extensions=[]):
                 files_found.append(fpath)
 
     return files_found
+
+
+#PUB-9 utilities
+def special_trim_pub_9(mystring):
+    mystring = mystring.replace("** ", "**")
+    mystring = mystring.replace(" **", "**")
+    mystring = mystring.replace("* ", "*")
+    mystring = mystring.replace(" *", "*")
+    mystring = mystring.replace("_ ", "_")
+    mystring = mystring.replace(" _", "_")
+    mystring = mystring.replace("` ", "`")
+    mystring = mystring.replace(" `", "`")
+    return mystring
+
+def find_candidate_strings_for_pub_9(mystring):
+    candidates1 = re.findall(r"_ [a-z]* _", mystring)
+    candidates2 = re.findall(r"` [a-z]* `", mystring)
+    candidates3 = re.findall(r"[*]+ [a-z]* [*]+", mystring)
+    return candidates1 + candidates2 + candidates3
+
+def trim_pub_9(mystring):
+    candidates = find_candidate_strings_for_pub_9(mystring)
+    for i in candidates:
+        mystring = mystring.replace(i, special_trim_pub_9(i))
+    return mystring    
