@@ -58,25 +58,50 @@ def find_files(src, file_names=[], extensions=[]):
 
 
 #PUB-9 utilities. These methods are for trimming spaces on specific markdown like ** or _. The main method is trim_spaces_on_specific_markdown which uses trim_spaces_on_specific_markdown_breakdown and strings_with_specific_markdown_and_spaces.
-def trim_spaces_on_specific_markdown_breakdown(mystring):
-    mystring = mystring.replace("** ", "**")
-    mystring = mystring.replace(" **", "**")
-    mystring = mystring.replace("* ", "*")
-    mystring = mystring.replace(" *", "*")
-    mystring = mystring.replace("_ ", "_")
-    mystring = mystring.replace(" _", "_")
-    mystring = mystring.replace("` ", "`")
-    mystring = mystring.replace(" `", "`")
-    return mystring
+ 
 
-def strings_with_specific_markdown_and_spaces(mystring):
-    candidates1 = re.findall(r"_[ ]*[a-z]*[ ]*_", mystring)
-    candidates2 = re.findall(r"`[ ]*[a-z]*[ ]*`", mystring)
-    candidates3 = re.findall(r"[*]+[ ]*[a-z]*[ ]*[*]+", mystring)
-    return candidates1 + candidates2 + candidates3
+regular_expressions_matrix_for_trimming_spaces = [
+    {'character':'_', 'regular_expression_for_wrong_left':r"_[ ]+[a-z]+[ ]*_", 'regular_expression_for_wrong_right':r"_[ ]*[a-z]+[ ]+_", "regular_expression_for_correct":r"_[a-z]*_"},
+    {'character':'`', 'regular_expression_for_wrong_left':r"`[ ]+[a-z]+[ ]*`", 'regular_expression_for_wrong_right':r"`[ ]*[a-z]+[ ]+`", "regular_expression_for_correct":r"`[a-z]*`"},
+    {'character':'<asterisk>', 'regular_expression_for_wrong_left':r"<asterisk>[ ]+[a-z]+[ ]*<asterisk>", 'regular_expression_for_wrong_right':r"<asterisk>[ ]*[a-z]+[ ]+<asterisk>", "regular_expression_for_correct":r"<asterisk>[a-z]*<asterisk>"},
+    {'character':'*', 'regular_expression_for_wrong_left':r"\*[ ]+[a-z]+[ ]*\*", 'regular_expression_for_wrong_right':r"\*[ ]*[a-z]+[ ]+\*", "regular_expression_for_correct":r"\*[a-z]*\*"},
+    ]
 
-def trim_spaces_on_specific_markdown(mystring):
-    candidates = strings_with_specific_markdown_and_spaces(mystring)
-    for i in candidates:
-        mystring = mystring.replace(i, trim_spaces_on_specific_markdown_breakdown(i))
-    return mystring    
+corrections_for_trimming_spaces = [
+    {'character':'_', 'left_space':"_ ", 'right_space':" _"},
+    {'character':'`', 'left_space':"` ", 'right_space':" `"},
+    {'character':'<asterisk>', 'left_space':"<asterisk> ", 'right_space':" <asterisk>"},
+    {'character':'*', 'left_space':"* ", 'right_space':" *"},
+    ]
+
+def trim_spaces_on_specific_markdown(content):
+    content = content.replace("**", "<asterisk>")
+    for i in [0, 1, 2, 3]:
+        character_on_focus = regular_expressions_matrix_for_trimming_spaces[i]['character']
+        problematic_strings_left = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong_left'], content)
+        problematic_strings_right = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong_right'], content)
+        problematic_strings = list(set(problematic_strings_left) | set(problematic_strings_right))
+
+        # while problematic_strings != []:
+        #     problematic_string = problematic_strings[0]
+        #     modified_string = problematic_string
+        #     while True:
+        #         modified_string = modified_string.replace(corrections_for_trimming_spaces[i]['left_space'], character_on_focus)
+        #         modified_string = modified_string.replace(corrections_for_trimming_spaces[i]['right_space'], character_on_focus)        
+        #         if bool(re.search(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_correct'], modified_string)):
+        #             break
+        #     content = content.replace(problematic_string, modified_string)
+        #     problematic_strings = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong'], content)
+            
+        for problematic_string in problematic_strings:
+            modified_string = problematic_string
+            while True:
+                modified_string = modified_string.replace(corrections_for_trimming_spaces[i]['right_space'], character_on_focus)        
+                modified_string = modified_string.replace(corrections_for_trimming_spaces[i]['left_space'], character_on_focus)
+                if bool(re.search(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_correct'], modified_string)):
+                    break
+            content = content.replace(problematic_string, modified_string)
+#            problematic_strings = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong'], content)
+
+    content = content.replace("<asterisk>", "**")
+    return content        
