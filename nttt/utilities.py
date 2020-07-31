@@ -57,8 +57,8 @@ def find_files(src, file_names=[], extensions=[]):
     return files_found
 
 
-#PUB-9 utilities
-def special_trim_pub_9(mystring):
+#PUB-9 utilities. These methods are for trimming spaces on specific markdown like ** or _. The main method is trim_spaces_on_specific_markdown which uses trim_spaces_on_specific_markdown_breakdown and strings_with_specific_markdown_and_spaces.
+def trim_spaces_on_specific_markdown_breakdown(mystring):
     mystring = mystring.replace("** ", "**")
     mystring = mystring.replace(" **", "**")
     mystring = mystring.replace("* ", "*")
@@ -69,14 +69,14 @@ def special_trim_pub_9(mystring):
     mystring = mystring.replace(" `", "`")
     return mystring
 
-def find_candidate_strings_for_pub_9(mystring):
-    candidates1 = re.findall(r"_ [a-z]* _", mystring)
-    candidates2 = re.findall(r"` [a-z]* `", mystring)
-    candidates3 = re.findall(r"[*]+ [a-z]* [*]+", mystring)
+def strings_with_specific_markdown_and_spaces(mystring):
+    candidates1 = re.findall(r"_[ ]*[a-z]*[ ]*_", mystring)
+    candidates2 = re.findall(r"`[ ]*[a-z]*[ ]*`", mystring)
+    candidates3 = re.findall(r"[*]+[ ]*[a-z]*[ ]*[*]+", mystring)
     return candidates1 + candidates2 + candidates3
 
-def trim_pub_9(mystring):
-    candidates = find_candidate_strings_for_pub_9(mystring)
+def trim_spaces_on_specific_markdown(mystring):
+    candidates = strings_with_specific_markdown_and_spaces(mystring)
     for i in candidates:
-        mystring = mystring.replace(i, special_trim_pub_9(i))
+        mystring = mystring.replace(i, trim_spaces_on_specific_markdown_breakdown(i))
     return mystring    
