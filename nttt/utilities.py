@@ -3,6 +3,7 @@ import os
 import os.path
 import codecs
 import re
+import eol
 
 def get_file(file_name):
     with codecs.open(file_name, encoding='utf-8') as f:
