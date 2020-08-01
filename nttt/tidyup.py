@@ -2,35 +2,34 @@ from .utilities import find_files, find_replace, find_snippet, get_file, save_fi
 from .utilities import trim_spaces_on_specific_markdown
 import os
 import os.path
-import re
 from pathlib import Path
 
 def fix_meta(src, dst):
-    find_replace(src, dst, "  - \r\n    title:", "  - title:")
+    find_replace(src, dst, "  - \n    title:", "  - title:")
 
 def fix_step(src, dst):
-    content = get_file(src)
+    content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
-    content = content.replace("--- hints ---", "--- hints ---\r\n")
-    content = content.replace(" --- hint --- ", "--- hint ---\r\n")
-    content = content.replace(" --- /hint ---", "\r\n--- /hint ---\r\n")
+    content = content.replace("--- hints ---", "--- hints ---\n")
+    content = content.replace(" --- hint --- ", "--- hint ---\n")
+    content = content.replace(" --- /hint ---", "\n--- /hint ---\n")
     content = content.replace(" --- /hints ---", "--- /hints ---")
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
     content = trim_spaces_on_specific_markdown(content)
     
-    collapse_error = "--- collapse ---\r\n\r\n## title: "
-    collapse_title = find_snippet(content, collapse_error, "\r\n")
+    collapse_error = "--- collapse ---\n\n## title: "
+    collapse_title = find_snippet(content, collapse_error, "\n")
     while collapse_title is not None:
-        content = content.replace(collapse_error + collapse_title + "\r\n", "--- collapse ---\r\n---\r\ntitle: " + collapse_title + "\r\n---\r\n")
-        collapse_title = find_snippet(content, collapse_error, "\r\n")
+        content = content.replace(collapse_error + collapse_title + "\n", "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
+        collapse_title = find_snippet(content, collapse_error, "\n")
 
     # update language in urls
     lang = os.path.split(os.path.split(src)[0])[1]
     content = content.replace("/en/", "/" + lang + "/")
 
-    save_file(dst, content)
+    save_file(dst, content, suggested_eol)
 
     # doesnt work...  needs thinking about!
     # bold_text = find_snippet(dst, "** ", " **")

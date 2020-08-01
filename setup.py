@@ -15,7 +15,6 @@ __version__ = '0.1.1-SNAPSHOT'
 __author__ = "Martin O'Hanlon"
 __author_email__ = 'martin.ohanlon@raspberrypi.org'
 __url__ = 'https://github.com/raspberrypilearning/nttt'
-#__requires__ = []
 
 if __name__ == '__main__':
     setup(name='nttt',
@@ -25,7 +24,6 @@ if __name__ == '__main__':
           author = __author__,
           author_email = __author_email__,
           packages = [__project__],
-          #install_requires = __requires__,
           entry_points={
               'console_scripts': [
                   'nttt = nttt:main'

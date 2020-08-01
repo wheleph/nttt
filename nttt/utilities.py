@@ -6,11 +6,12 @@ import re
 import eol
 
 def get_file(file_name):
-    with codecs.open(file_name, encoding='utf-8') as f:
-        return f.read()
+    with open(file_name, encoding='utf-8') as f:
+        (_, suggested_eol) = eol.eol_info_from_path(file_name)
+        return f.read(), suggested_eol
 
-def save_file(file_name, s):
-    with codecs.open(file_name, encoding='utf-8', mode="w") as f:
+def save_file(file_name, s, suggested_eol):
+    with open(file_name, encoding='utf-8', mode="w", newline=suggested_eol) as f:
         f.write(s)
 
 def find_snippet(s, start_string, end_string):
@@ -23,10 +24,11 @@ def find_snippet(s, start_string, end_string):
         return None
 
 def find_replace(src, dst, find, replace):
-    with codecs.open(src, encoding='utf-8') as f:
+    with open(src, encoding='utf-8') as f:
         s = f.read()
+    (_, suggested_eol) = eol.eol_info_from_path(src)
     s = s.replace(find, replace)
-    with codecs.open(dst, encoding='utf-8', mode="w") as f:
+    with open(dst, encoding='utf-8', mode="w", newline=suggested_eol) as f:
         f.write(s)
 
 def find_files(src, file_names=[], extensions=[]):
