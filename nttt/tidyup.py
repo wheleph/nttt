@@ -1,3 +1,4 @@
+from .constants import INPUT, OUTPUT, ENGLISH, LANGUAGE, VOLUNTEERS, FINAL
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
 
 import os
@@ -37,7 +38,14 @@ def fix_step(src, dst):
     #     bold_text = find_snippet(dst, "** ", " **")
 
 
-def tidyup_translations(folder, output_folder):
+def tidyup_translations(arguments):
+
+    folder = arguments[INPUT]
+    output_folder = arguments[OUTPUT]
+    english_folder = arguments[ENGLISH]
+    language = arguments[LANGUAGE]
+    volunteers = arguments[VOLUNTEERS]
+    final_step = arguments[FINAL]
 
     # tidy up and get absolute paths
     folder = folder.strip().rstrip(os.pathsep).rstrip('"')
@@ -46,7 +54,6 @@ def tidyup_translations(folder, output_folder):
     output_folder = Path(output_folder).absolute()
 
     if os.path.isdir(folder):
-
         
         # get files to update
         if folder == output_folder:
@@ -54,6 +61,10 @@ def tidyup_translations(folder, output_folder):
         else:
             print("Input folder - '{}'".format(folder))
             print("Output folder - '{}'".format(output_folder))
+        print("English folder - '{}'".format(english_folder))
+        print("Language - '{}'".format(language))
+        print("Volunteers - '{}'".format(volunteers))
+        print("Final step - '{}'".format(final_step))
     
         print("Find files ...")
         files_to_update = find_files(folder, file_names=["meta.yml"], extensions=[".md"])

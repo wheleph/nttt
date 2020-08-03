@@ -2,7 +2,7 @@
 
 "Nina's Translation Tidy-up Tool"
 
-Note - NTTT will only work on Windows.
+Note - NTTT will work on Windows, macOS and Linux.
 
 ## Install
 
@@ -54,16 +54,28 @@ To bring up full usage information use the `-h`/`--help` option.
 ```bash
 nttt -h
 
-usage: nttt [-h] [-i INPUT] [-o OUTPUT]
+usage: nttt [-h] [-i INPUT] [-o OUTPUT] [-e ENGLISH] [-l LANGUAGE] [-v VOLUNTEERS] [-f FINAL]
 
 Nina's Translation Tidyup Tool
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help            Show this help message and exit.
   -i INPUT, --input INPUT
                         The input directory which contains the content to tidy
                         up, defaults to the current folder.
   -o OUTPUT, --output OUTPUT
                         The output directory where the upgraded content should
                         be written, defaults to the same as input.
+  -e ENGLISH, --english ENGLISH
+                        The directory which contains the English files and
+                        folders, defaults to INPUT/../en.
+  -l LANGUAGE, --language LANGUAGE
+                        The language of the content to be tidied up, defaults
+                        to basename(INPUT).
+  -v VOLUNTEERS, --volunteers VOLUNTEERS
+                        The list of volunteers as a comma separated list,
+                        defaults to an empty list.
+  -f FINAL, --final FINAL
+                        The number of the final step file, defaults to the
+                        step file with the highest number.
 ```
