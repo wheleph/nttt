@@ -1,14 +1,12 @@
-from .constants import INPUT, OUTPUT, ENGLISH, LANGUAGE, VOLUNTEERS, FINAL
+from .constants import Constants
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
 
-import os
 import os.path
-from pathlib import Path
 
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, dst):
+def fix_step(src, dst, lang):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -26,7 +24,6 @@ def fix_step(src, dst):
         collapse_title = find_snippet(content, collapse_error, "\n")
 
     # update language in urls
-    lang = os.path.split(os.path.split(src)[0])[1]
     content = content.replace("/en/", "/" + lang + "/")
 
     save_file(dst, content, suggested_eol)
@@ -40,65 +37,44 @@ def fix_step(src, dst):
 
 def tidyup_translations(arguments):
 
-    folder = arguments[INPUT]
-    output_folder = arguments[OUTPUT]
-    english_folder = arguments[ENGLISH]
-    language = arguments[LANGUAGE]
-    volunteers = arguments[VOLUNTEERS]
-    final_step = arguments[FINAL]
+    folder = arguments[Constants.INPUT]
+    output_folder = arguments[Constants.OUTPUT]
+    # english_folder = arguments[Constants.ENGLISH]
+    language = arguments[Constants.LANGUAGE]
+    # volunteers = arguments[Constants.VOLUNTEERS]
+    # final_step = arguments[Constants.FINAL]
 
-    # tidy up and get absolute paths
-    folder = folder.strip().rstrip(os.pathsep).rstrip('"')
-    folder = Path(folder).absolute()
-    output_folder = output_folder.strip().rstrip(os.pathsep).rstrip('"')
-    output_folder = Path(output_folder).absolute()
+    # get files to update
+    print("Find files ...")
+    files_to_update = find_files(folder, file_names=["meta.yml"], extensions=[".md"])
 
-    if os.path.isdir(folder):
+    if len(files_to_update) > 0:
+        print("About to tidy up files:")
+        for file in files_to_update:
+            print(" - {}".format(file.replace(str(folder), "")))
         
-        # get files to update
-        if folder == output_folder:
-            print("Using folder - {}".format(folder))
-        else:
-            print("Input folder - '{}'".format(folder))
-            print("Output folder - '{}'".format(output_folder))
-        print("English folder - '{}'".format(english_folder))
-        print("Language - '{}'".format(language))
-        print("Volunteers - '{}'".format(volunteers))
-        print("Final step - '{}'".format(final_step))
-    
-        print("Find files ...")
-        files_to_update = find_files(folder, file_names=["meta.yml"], extensions=[".md"])
+        process_yn = input("Continue (y/n):")
+        if process_yn.casefold() == "y":
 
-        if len(files_to_update) > 0:
-            print("About to tidy up files:")
-            for file in files_to_update:
-                print(" - {}".format(file.replace(str(folder), "")))
-            
-            process_yn = input("Continue (y/n):")
-            if process_yn.casefold() == "y":
+            for source_file_path in files_to_update:
+                file_name = source_file_path.replace(str(folder), "")
 
-                for source_file_path in files_to_update:
-                    file_name = source_file_path.replace(str(folder), "")
-
-                    output_file_path = str(output_folder) + file_name
-                    
-                    # create output folder
-                    output_file_folder = os.path.dirname(output_file_path)
-
-
-                    if not os.path.exists(output_file_folder):
-                        os.makedirs(output_file_folder)
-
-                    print("Fixing - {}".format(file_name))
-                    if os.path.basename(source_file_path) == "meta.yml":
-                        fix_meta(source_file_path, output_file_path)
-                    else:
-                        fix_step(source_file_path, output_file_path)
+                output_file_path = str(output_folder) + file_name
                 
-                print("Complete")
-                    
-        else:
-            print("No files found in '{}'".format(folder))
+                # create output folder
+                output_file_folder = os.path.dirname(output_file_path)
 
+
+                if not os.path.exists(output_file_folder):
+                    os.makedirs(output_file_folder)
+
+                print("Fixing - {}".format(file_name))
+                if os.path.basename(source_file_path) == "meta.yml":
+                    fix_meta(source_file_path, output_file_path)
+                else:
+                    fix_step(source_file_path, output_file_path, language)
+            
+            print("Complete")
+                
     else:
-        print("Folder '{}' not found".format(folder))
+        print("No files found in '{}'".format(folder))
