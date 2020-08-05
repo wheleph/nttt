@@ -6,7 +6,7 @@ import os.path
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, dst, lang):
+def fix_step(src, dst, lang = "nl-NL"):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
