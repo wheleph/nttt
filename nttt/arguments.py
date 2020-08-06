@@ -9,23 +9,27 @@ def get_absolute_path(folder):
     folder = Path(folder).absolute()
     return folder
 
+def get_step_file(folder, step):
+    '''Returns the step file for the given step number.'''
+
+    return Path("{}{}step_{}.md".format(folder, os.sep, str(step)))
+
 def get_final_step(folder):
-    '''Returns the number of the final step file.'''
+    '''Returns the number of the final step file, or 0 in case there are no step files.'''
 
     final_step = 0
     step = 1
-    step_file = Path("{}{}step_{}.md".format(folder, os.sep, str(step)))
+    step_file = get_step_file(folder, step)
     while os.path.isfile(step_file):
         final_step = step
         step += 1
-        step_file = Path("{}{}step_{}.md".format(folder, os.sep, str(step)))
+        step_file = get_step_file(folder, step)
     return final_step
 
-def get_arguments():
-    '''Returns the command line arguments. For arguments that are not provided ont he command line, the default if used.'''
+def parse_command_line():
+    '''Parses the command line and returns the arguments provided on command line.'''
 
     from argparse import ArgumentParser
-    from os.path import basename, dirname
 
     parser = ArgumentParser(description="Nina's Translation Tidyup Tool v 0.1.1-SNAPSHOT")
     parser.add_argument("-i", "--input",      help = "The input directory which contains the content to tidy up, defaults to the current directory.")
@@ -34,37 +38,42 @@ def get_arguments():
     parser.add_argument("-l", "--language",   help = "The language of the content to be tidied up, defaults to basename(INPUT).")
     parser.add_argument("-v", "--volunteers", help = "The list of volunteers as a comma separated list, defaults to an empty list.")
     parser.add_argument("-f", "--final",      help = "The number of the final step file, defaults to the step file with the highest number.")
-    args = parser.parse_args()
+    return parser.parse_args()
+
+def get_arguments(command_line_args):
+    '''Returns the complete set of arguments. For arguments that are not provided on the command line, the default if used.'''
+
+    from os.path import basename, dirname
 
     arguments = {}
 
-    if args.input:
-        arguments[Constants.INPUT] = get_absolute_path(args.input)
+    if command_line_args.input:
+        arguments[Constants.INPUT] = get_absolute_path(command_line_args.input)
     else:
         arguments[Constants.INPUT] = get_absolute_path('.')
 
-    if args.output:
-        arguments[Constants.OUTPUT] = get_absolute_path(args.output)
+    if command_line_args.output:
+        arguments[Constants.OUTPUT] = get_absolute_path(command_line_args.output)
     else:
         arguments[Constants.OUTPUT] = arguments[Constants.INPUT]
 
-    if args.english:
-        arguments[Constants.ENGLISH] = get_absolute_path(args.english)
+    if command_line_args.english:
+        arguments[Constants.ENGLISH] = get_absolute_path(command_line_args.english)
     else:
-        arguments[Constants.ENGLISH] = dirname(arguments[Constants.INPUT]) + os.sep + 'en'
+        arguments[Constants.ENGLISH] = Path(dirname(arguments[Constants.INPUT]) + os.sep + 'en')
 
-    if args.language:
-        arguments[Constants.LANGUAGE] = args.language
+    if command_line_args.language:
+        arguments[Constants.LANGUAGE] = command_line_args.language
     else:
         arguments[Constants.LANGUAGE] = basename(arguments[Constants.INPUT])
 
-    if args.volunteers:
-        arguments[Constants.VOLUNTEERS] = [name.strip() for name in args.volunteers.split(',')]
+    if command_line_args.volunteers:
+        arguments[Constants.VOLUNTEERS] = [name.strip() for name in command_line_args.volunteers.split(',')]
     else:
         arguments[Constants.VOLUNTEERS] = []
 
-    if args.final:
-        arguments[Constants.FINAL] = int(args.final)
+    if command_line_args.final:
+        arguments[Constants.FINAL] = int(command_line_args.final)
     else:
         arguments[Constants.FINAL] = get_final_step(arguments[Constants.INPUT])
 
@@ -90,8 +99,20 @@ def check_folder(folder):
 
     valid = True
     if not os.path.isdir(folder):
-        valid = False;
-        print("Folder '{}' not found".format(folder), file=sys.stderr)
+        valid = False
+        print("Folder '{}' not found".format(folder), file = sys.stderr)
+    return valid
+
+def check_step_file(folder, step):
+    '''Checks whether the step file for the given number exists.'''
+
+    import sys
+
+    valid = True
+    step_file = get_step_file(folder, step)
+    if not os.path.isfile(step_file):
+        valid = False
+        print('Step file {} not found.'.format(step_file), file = sys.stderr)
     return valid
 
 def check_arguments(arguments):
@@ -99,7 +120,11 @@ def check_arguments(arguments):
 
     valid = True
     if not check_folder(arguments[Constants.INPUT]):
-        valid = False;
+        valid = False
     if not check_folder(arguments[Constants.ENGLISH]):
-        valid = False;
+        valid = False
+    if os.path.exists(arguments[Constants.OUTPUT]) and not check_folder(arguments[Constants.OUTPUT]):
+        valid = False
+    if arguments[Constants.FINAL] > 0 and not check_step_file(arguments[Constants.INPUT], arguments[Constants.FINAL]):
+        valid = False
     return valid
