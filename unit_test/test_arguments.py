@@ -39,12 +39,8 @@ class TestArguments(unittest.TestCase):
         - With the command line arguments specified, those values are used.
         '''
 
-        if os.name == 'nt':
-            # FIXME: This test case doesn't run on Windows, because the os.chdir function doesn't seem to
-            # work on Path objects.
-            return
-
         class CommandLineArgs():
+            '''Simple placeholder for command line arguments.'''
             def __init__(self):
                 self.input =      False
                 self.output =     False
@@ -53,41 +49,47 @@ class TestArguments(unittest.TestCase):
                 self.volunteers = False
                 self.final =      False
 
-        with TemporaryDirectory() as temp_folder:
-            input_folder = Path("{}{}hi-IN".format(temp_folder, os.sep))
-            english_folder = Path("{}{}en".format(temp_folder, os.sep))
-            os.mkdir(input_folder)
-            os.chdir(input_folder)
+        # Using the os.chdir function for a subdirectory of a directory created with
+        # TemporaryDirectory doesn't work on Windows and macOS. Therefore, this test
+        # case uses directories below the directory that contains this test case (i.e.
+        # "unit_test"). These directories have to be present in the repository.
+        data_folder = Path(os.getcwd(), "unit_test", "data")
+        self.assertTrue(data_folder.is_dir(), "Subdirectory data of directory unit_test is missing.")
+        input_folder = Path(data_folder, "hi-IN")
+        self.assertTrue(input_folder.is_dir(), "Subdirectory hi-IN of directory data is missing.")
+        output_folder = input_folder
+        english_folder = Path(data_folder, "en")
+        os.chdir(input_folder)
 
-            # Defaults for all arguments.
-            command_line_args = CommandLineArgs()
-            arguments = nttt.arguments.get_arguments(command_line_args)
-            self.assertEqual(arguments[nttt.arguments.Constants.INPUT],      input_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.OUTPUT],     input_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.ENGLISH],    english_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.LANGUAGE],   "hi-IN")
-            self.assertEqual(arguments[nttt.arguments.Constants.VOLUNTEERS], [])
-            self.assertEqual(arguments[nttt.arguments.Constants.FINAL],      0)
+        # Defaults for all arguments.
+        command_line_args = CommandLineArgs()
+        arguments = nttt.arguments.get_arguments(command_line_args)
+        self.assertEqual(arguments[nttt.arguments.Constants.INPUT],      input_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.OUTPUT],     output_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.ENGLISH],    english_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.LANGUAGE],   "hi-IN")
+        self.assertEqual(arguments[nttt.arguments.Constants.VOLUNTEERS], [])
+        self.assertEqual(arguments[nttt.arguments.Constants.FINAL],      0)
 
-            input_folder = Path("{}{}da-DK".format(temp_folder, os.sep))
-            output_folder = Path("{}{}output".format(temp_folder, os.sep))
-            english_folder = Path("{}{}en-GB".format(temp_folder, os.sep))
-            os.chdir(temp_folder)
+        input_folder = Path(data_folder, "da-DK")
+        output_folder = Path(data_folder, "output")
+        english_folder = Path(data_folder, "en-GB")
+        os.chdir(data_folder)
 
-            # Specify all arguments.
-            command_line_args.input =      "da-DK"
-            command_line_args.output =     "output"
-            command_line_args.english =    "en-GB"
-            command_line_args.language =   "de-DE"
-            command_line_args.volunteers = " Volunteer One , Volunteer Two "
-            command_line_args.final =      5
-            arguments = nttt.arguments.get_arguments(command_line_args)
-            self.assertEqual(arguments[nttt.arguments.Constants.INPUT],      input_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.OUTPUT],     output_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.ENGLISH],    english_folder)
-            self.assertEqual(arguments[nttt.arguments.Constants.LANGUAGE],   "de-DE")
-            self.assertEqual(arguments[nttt.arguments.Constants.VOLUNTEERS], ["Volunteer One", "Volunteer Two"])
-            self.assertEqual(arguments[nttt.arguments.Constants.FINAL],      5)
+        # Specify all arguments.
+        command_line_args.input =      "da-DK"
+        command_line_args.output =     "output"
+        command_line_args.english =    "en-GB"
+        command_line_args.language =   "de-DE"
+        command_line_args.volunteers = " Volunteer One , Volunteer Two "
+        command_line_args.final =      5
+        arguments = nttt.arguments.get_arguments(command_line_args)
+        self.assertEqual(arguments[nttt.arguments.Constants.INPUT],      input_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.OUTPUT],     output_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.ENGLISH],    english_folder)
+        self.assertEqual(arguments[nttt.arguments.Constants.LANGUAGE],   "de-DE")
+        self.assertEqual(arguments[nttt.arguments.Constants.VOLUNTEERS], ["Volunteer One", "Volunteer Two"])
+        self.assertEqual(arguments[nttt.arguments.Constants.FINAL],      5)
 
     def test_check_folder(self):
         ''' Test case for the check_folder function:
@@ -98,20 +100,20 @@ class TestArguments(unittest.TestCase):
 
         with TemporaryDirectory() as temp_folder:
             result = nttt.arguments.check_folder(temp_folder)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
-            test_file = Path("{}{}test_file".format(temp_folder, os.sep))
+            test_file = Path(temp_folder, "test_file")
             test_file.touch()
             result = nttt.arguments.check_folder(test_file)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
-            test_dir = Path("{}{}test_dir".format(temp_folder, os.sep))
+            test_dir = Path(temp_folder, "test_dir")
             result = nttt.arguments.check_folder(test_dir)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             os.mkdir(test_dir)
             result = nttt.arguments.check_folder(test_dir)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
     def test_check_step_file(self):
         ''' Test case for the check_step_file function:
@@ -121,12 +123,12 @@ class TestArguments(unittest.TestCase):
 
         with TemporaryDirectory() as temp_folder:
             result = nttt.arguments.check_step_file(temp_folder, 3)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             step_file = nttt.arguments.get_step_file(temp_folder, 3)
             step_file.touch()
             result = nttt.arguments.check_step_file(temp_folder, 3)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
     def test_check_arguments(self):
         ''' Test case for the check_arguments function:
@@ -139,48 +141,48 @@ class TestArguments(unittest.TestCase):
 
         with TemporaryDirectory() as temp_folder:
             arguments = {}
-            arguments[nttt.arguments.Constants.INPUT] =      Path("{}{}uk-UA".format(temp_folder, os.sep))
-            arguments[nttt.arguments.Constants.OUTPUT] =     Path("{}{}output".format(temp_folder, os.sep))
-            arguments[nttt.arguments.Constants.ENGLISH] =    Path("{}{}en".format(temp_folder, os.sep))
+            arguments[nttt.arguments.Constants.INPUT] =      Path(temp_folder, "uk-UA")
+            arguments[nttt.arguments.Constants.OUTPUT] =     Path(temp_folder, "output")
+            arguments[nttt.arguments.Constants.ENGLISH] =    Path(temp_folder, "en")
             arguments[nttt.arguments.Constants.LANGUAGE] =   "uk-UA"
             arguments[nttt.arguments.Constants.VOLUNTEERS] = []
             arguments[nttt.arguments.Constants.FINAL] =      0
 
             # Input and English folder don't exist. Output folder and final step are OK.
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             # Create input folder. English folder still doesn't exist.
             os.mkdir(arguments[nttt.arguments.Constants.INPUT])
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             # Create English folder as well.
             os.mkdir(arguments[nttt.arguments.Constants.ENGLISH])
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
             # Final step file doesn't exist.
             arguments[nttt.arguments.Constants.FINAL] = 3
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             # Create final step file.
             step_file = nttt.arguments.get_step_file(arguments[nttt.arguments.Constants.INPUT], 3)
             step_file.touch()
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
             # Create output folder as file.
             arguments[nttt.arguments.Constants.OUTPUT].touch()
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, False)
+            self.assertFalse(result)
 
             # Create proper output folder.
             os.remove(arguments[nttt.arguments.Constants.OUTPUT])
             os.mkdir(arguments[nttt.arguments.Constants.OUTPUT])
             result = nttt.arguments.check_arguments(arguments)
-            self.assertEqual(result, True)
+            self.assertTrue(result)
 
 if __name__ == "__main__":
     unittest.main()

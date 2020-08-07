@@ -12,7 +12,7 @@ def get_absolute_path(folder):
 def get_step_file(folder, step):
     '''Returns the step file for the given step number.'''
 
-    return Path("{}{}step_{}.md".format(folder, os.sep, str(step)))
+    return Path(folder, str(step))
 
 def get_final_step(folder):
     '''Returns the number of the final step file, or 0 in case there are no step files.'''
@@ -60,7 +60,7 @@ def get_arguments(command_line_args):
     if command_line_args.english:
         arguments[Constants.ENGLISH] = get_absolute_path(command_line_args.english)
     else:
-        arguments[Constants.ENGLISH] = Path(dirname(arguments[Constants.INPUT]) + os.sep + 'en')
+        arguments[Constants.ENGLISH] = Path(dirname(arguments[Constants.INPUT]), 'en')
 
     if command_line_args.language:
         arguments[Constants.LANGUAGE] = command_line_args.language
