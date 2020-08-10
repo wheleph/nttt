@@ -78,4 +78,69 @@ optional arguments:
   -f FINAL, --final FINAL
                         The number of the final step file, defaults to the
                         step file with the highest number.
+
+examples of usage:
+  nttt
+    Use the current directory (.) as input and output directory, ../en
+    (..\en on Windows) as English directory, and the last part of the
+    full path to the current directory as language. No volunteer names
+    will be added to the final step file and the step file with the
+    highest number is used as final step file.
+
+  nttt -i path/to/project/de-DE (macOS and Linux)
+  nttt -i path\to\project\de-DE (Windows)
+    Use path/to/project/de-DE (path\to\project\de-DE on Windows) as input
+    and output directory, path/to/project/en as English directory and de-DE
+    as language. No volunteer names will be added to the final step file
+    and the step file with the highest number is used as final step file.
+
+  nttt -o ../output (macOS and Linux)
+  nttt -o ..\output (Windows)
+    Use the current directory (.) as input directory, ../output
+    (..\output on Windows) as output directory, ../en
+    (..\en on Windows) as English directory, and the last part of the
+    full path to the current directory as language. No volunteer names
+    will be added to the final step file and the step file with the
+    highest number is used as final step file.
+
+  nttt -e some/other/path/en (macOS and Linux)
+  nttt -e some\other\path\en (Windows)
+    Use the current directory (.) as input and output directory,
+    some/other/path/en (some\other\path\en on Windows) as English
+    directory, and the last part of the full path to the current
+    directory as language. No volunteer names will be added to the
+    final step file and the step file with the highest number is
+    used as final step file.
+
+  nttt -l hi-IN
+    Use path/to/project/de-DE (path\to\project\de-DE on Windows) as input
+    and output directory, path/to/project/en as English directory and hi-IN
+    as language. No volunteer names will be added to the final step file
+    and the step file with the highest number is used as final step file.
+
+  nttt -v "Volunteer Translator, Volunteer Reviewer, Volunteer Tester"
+    Use the current directory (.) as input and output directory, ../en
+    (..\en on Windows) as English directory, and the last part of the
+    full path to the current directory as language. Three volunteer names
+    are added to the final step file: "Volunteer Translator",
+    "Volunteer Reviewer" and "Volunteer Tester". The step file with the
+    highest number is used as final step file.
+    Note that the list of volunteer names should be enclosed in quotes.
+    Also note that spaces at the beginning and end of the list as well
+    as spaces before and after commas will be discarded.
+
+  nttt -f 7
+    Use the current directory (.) as input and output directory, ../en
+    (..\en on Windows) as English directory, and the last part of the
+    full path to the current directory as language. No volunteer names
+    will be added to the final step file. File step_7.md will be used as
+    final step file.
+
+  nttt -i path/to/project/de-DE -o ../output -e some/other/path/en -l hi-IN \
+       -v "Volunteer Translator, Volunteer Reviewer, Volunteer Tester" -f 7
+	Use path/to/project/de-DE as input directory, ../output as output
+	directory, some/other/path/en as English directory, and hi-IN as
+    language. Three volunteer names are added to the final step file:
+    "Volunteer Translator", "Volunteer Reviewer" and "Volunteer Tester".
+    File step_7.md will be used as final step file.
 ```

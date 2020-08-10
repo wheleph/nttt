@@ -1,8 +1,8 @@
-class Constants:
+class ArgumentKeyConstants:
     # Keys for the arguments dictionary
-    INPUT =      'INPUT'
-    OUTPUT =     'OUTPUT'
-    ENGLISH =    'ENGLISH'
-    LANGUAGE =   'LANGUAGE'
+    INPUT = 'INPUT'
+    OUTPUT = 'OUTPUT'
+    ENGLISH = 'ENGLISH'
+    LANGUAGE = 'LANGUAGE'
     VOLUNTEERS = 'VOLUNTEERS'
-    FINAL =      'FINAL'
+    FINAL = 'FINAL'

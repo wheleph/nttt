@@ -1,12 +1,14 @@
-from .constants import Constants
+from .constants import ArgumentKeyConstants
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
 
 import os.path
 
+
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, dst, lang):
+
+def fix_step(src, lang, dst):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -16,7 +18,7 @@ def fix_step(src, dst, lang):
     content = content.replace(" --- /hints ---", "--- /hints ---")
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
-    
+
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
     while collapse_title is not None:
@@ -37,12 +39,12 @@ def fix_step(src, dst, lang):
 
 def tidyup_translations(arguments):
 
-    folder = arguments[Constants.INPUT]
-    output_folder = arguments[Constants.OUTPUT]
-    # english_folder = arguments[Constants.ENGLISH]
-    language = arguments[Constants.LANGUAGE]
-    # volunteers = arguments[Constants.VOLUNTEERS]
-    # final_step = arguments[Constants.FINAL]
+    folder = arguments[ArgumentKeyConstants.INPUT]
+    output_folder = arguments[ArgumentKeyConstants.OUTPUT]
+    # english_folder = arguments[ArgumentKeyConstants.ENGLISH]
+    language = arguments[ArgumentKeyConstants.LANGUAGE]
+    # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
+    # final_step = arguments[ArgumentKeyConstants.FINAL]
 
     # get files to update
     print("Find files ...")
@@ -52,7 +54,7 @@ def tidyup_translations(arguments):
         print("About to tidy up files:")
         for file in files_to_update:
             print(" - {}".format(file.replace(str(folder), "")))
-        
+
         process_yn = input("Continue (y/n):")
         if process_yn.casefold() == "y":
 
@@ -60,10 +62,9 @@ def tidyup_translations(arguments):
                 file_name = source_file_path.replace(str(folder), "")
 
                 output_file_path = str(output_folder) + file_name
-                
+
                 # create output folder
                 output_file_folder = os.path.dirname(output_file_path)
-
 
                 if not os.path.exists(output_file_folder):
                     os.makedirs(output_file_folder)
@@ -73,8 +74,8 @@ def tidyup_translations(arguments):
                     fix_meta(source_file_path, output_file_path)
                 else:
                     fix_step(source_file_path, output_file_path, language)
-            
+
             print("Complete")
-                
+
     else:
         print("No files found in '{}'".format(folder))
