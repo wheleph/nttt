@@ -5,10 +5,13 @@ import re
  
 
 regular_expressions_matrix_for_trimming_spaces = [
-    {'character':'_', 'regular_expression_for_wrong_left':r"_[ ]+[A-Za-z0-9]+[ ]*_", 'regular_expression_for_wrong_right':r"_[ ]*[A-Za-z0-9]+[ ]+_", "regular_expression_for_correct":r"_[A-Za-z0-9]*_"},
-    {'character':'`', 'regular_expression_for_wrong_left':r"`[ ]+[A-Za-z0-9]+[ ]*`", 'regular_expression_for_wrong_right':r"`[ ]*[A-Za-z0-9]+[ ]+`", "regular_expression_for_correct":r"`[A-Za-z0-9]*`"},
-    {'character':'<double_asterisk>', 'regular_expression_for_wrong_left':r"<double_asterisk>[ ]+[A-Za-z0-9]+[ ]*<double_asterisk>", 'regular_expression_for_wrong_right':r"<double_asterisk>[ ]*[A-Za-z0-9]+[ ]+<double_asterisk>", "regular_expression_for_correct":r"<double_asterisk>[A-Za-z0-9]*<double_asterisk>"},
-    {'character':'*', 'regular_expression_for_wrong_left':r"\*[ ]+[A-Za-z0-9]+[ ]*\*", 'regular_expression_for_wrong_right':r"\*[ ]*[A-Za-z0-9]+[ ]+\*", "regular_expression_for_correct":r"\*[A-Za-z0-9]*\*"},
+    {'character':'_', 'regular_expression_for_wrong_left':r"_[ ]+[A-Za-z0-9_]+[ ]*_", 'regular_expression_for_wrong_right':r"_[ ]*[A-Za-z0-9_]+[ ]+_", "regular_expression_for_correct":r"_[A-Za-z0-9_]*_"},
+    {'character':'`', 'regular_expression_for_wrong_left':r"`[ ]+[A-Za-z0-9_]+[ ]*`", 'regular_expression_for_wrong_right':r"`[ ]*[A-Za-z0-9_]+[ ]+`", "regular_expression_for_correct":r"`[A-Za-z0-9_]*`"},
+    {'character':'<double_asterisk>', 'regular_expression_for_wrong_left':r"<double_asterisk>[ ]+[A-Za-z0-9_]+[ ]*<double_asterisk>", 'regular_expression_for_wrong_right':r"<double_asterisk>[ ]*[A-Za-z0-9_]+[ ]+<double_asterisk>", "regular_expression_for_correct":r"<double_asterisk>[A-Za-z0-9_]*<double_asterisk>"},
+    {'character':'*', 'regular_expression_for_wrong_left':r"\*[ ]+[A-Za-z0-9_]+[ ]*\*", 'regular_expression_for_wrong_right':r"\*[ ]*[A-Za-z0-9_]+[ ]+\*", "regular_expression_for_correct":r"\*[A-Za-z0-9_]*\*"},
+    {'character':'<triple_asterisk>', 'regular_expression_for_wrong_left':r"<triple_asterisk>[ ]+[A-Za-z0-9_]+[ ]*<triple_asterisk>", 'regular_expression_for_wrong_right':r"<triple_asterisk>[ ]*[A-Za-z0-9_]+[ ]+<triple_asterisk>", "regular_expression_for_correct":r"<triple_asterisk>[A-Za-z0-9_]*<triple_asterisk>"},
+    {'character':'<double_underscore>', 'regular_expression_for_wrong_left':r"<double_underscore>[ ]+[A-Za-z0-9_]+[ ]*<double_underscore>", 'regular_expression_for_wrong_right':r"<double_underscore>[ ]*[A-Za-z0-9_]+[ ]+<double_underscore>", "regular_expression_for_correct":r"<double_underscore>[A-Za-z0-9_]*<double_underscore>"},
+    {'character':'<triple_underscore>', 'regular_expression_for_wrong_left':r"<triple_underscore>[ ]+[A-Za-z0-9_]+[ ]*<triple_underscore>", 'regular_expression_for_wrong_right':r"<triple_underscore>[ ]*[A-Za-z0-9_]+[ ]+<triple_underscore>", "regular_expression_for_correct":r"<triple_underscore>[A-Za-z0-9_]*<triple_underscore>"},
     ]
 
 corrections_for_trimming_spaces = [
@@ -16,11 +19,17 @@ corrections_for_trimming_spaces = [
     {'character':'`', 'left_space':"` ", 'right_space':" `"},
     {'character':'<double_asterisk>', 'left_space':"<double_asterisk> ", 'right_space':" <double_asterisk>"},
     {'character':'*', 'left_space':"* ", 'right_space':" *"},
+    {'character':'<triple_asterisk>', 'left_space':"<triple_asterisk> ", 'right_space':" <triple_asterisk>"},
+    {'character':'<double_underscore>', 'left_space':"<double_underscore> ", 'right_space':" <double_underscore>"},
+    {'character':'<triple_underscore>', 'left_space':"<triple_underscore> ", 'right_space':" <triple_underscore>"},
     ]
 
 def trim_spaces_on_specific_markdown(content):
+    content = content.replace("***", "<triple_asterisk>")
     content = content.replace("**", "<double_asterisk>")
-    for i in range(4):
+    content = content.replace("___", "<triple_underscore>")
+    content = content.replace("__", "<double_underscore>")
+    for i in range(7):
         character_on_focus = regular_expressions_matrix_for_trimming_spaces[i]['character']
         problematic_strings_left = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong_left'], content)
         problematic_strings_right = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong_right'], content)
@@ -36,4 +45,7 @@ def trim_spaces_on_specific_markdown(content):
 #            problematic_strings = re.findall(regular_expressions_matrix_for_trimming_spaces[i]['regular_expression_for_wrong'], content)
 
     content = content.replace("<double_asterisk>", "**")
+    content = content.replace("<triple_asterisk>", "***")
+    content = content.replace("<double_underscore>", "__")
+    content = content.replace("<triple_underscore>", "___")
     return content        

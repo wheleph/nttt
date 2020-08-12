@@ -51,6 +51,22 @@ class TestPub9(unittest.TestCase):
         c_initial = 'asd **    fGh76 ** asd ** g23hJ    ** asd'
         c_target = 'asd **fGh76** asd **g23hJ** asd'
         self.assertEqual(nttt.cleanup_markup.trim_spaces_on_specific_markdown(c_initial), c_target)
+    def test__double_triple_asterisks(self):
+        c_initial = 'asd **    fGh76 ** asd *** g23hJ    *** asd'
+        c_target = 'asd **fGh76** asd ***g23hJ*** asd'
+        self.assertEqual(nttt.cleanup_markup.trim_spaces_on_specific_markdown(c_initial), c_target)
+    def test__double_triple_underscores(self):
+        c_initial = 'asd __    fGh76 __ asd ___ g23hJ    ___ asd'
+        c_target = 'asd __fGh76__ asd ___g23hJ___ asd'
+        self.assertEqual(nttt.cleanup_markup.trim_spaces_on_specific_markdown(c_initial), c_target)
+    def test__underscore_in_asterisks(self):
+        c_initial = 'asd **    _fGh76 ** asd *** g23_hJ    *** asd'
+        c_target = 'asd **_fGh76** asd ***g23_hJ*** asd'
+        self.assertEqual(nttt.cleanup_markup.trim_spaces_on_specific_markdown(c_initial), c_target)
+    def test__underscore_in_underscores(self):
+        c_initial = 'asd __    f_Gh76 __ asd ___ g23_hJ    ___ asd'
+        c_target = 'asd __f_Gh76__ asd ___g23_hJ___ asd'
+        self.assertEqual(nttt.cleanup_markup.trim_spaces_on_specific_markdown(c_initial), c_target)
     
 
 

@@ -7,7 +7,7 @@ from pathlib import Path
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, dst):
+def fix_step(src, dst, dangerous_features):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -17,7 +17,9 @@ def fix_step(src, dst):
     content = content.replace(" --- /hints ---", "--- /hints ---")
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
-    content = trim_spaces_on_specific_markdown(content)
+
+    if dangerous_features == True:
+        content = trim_spaces_on_specific_markdown(content)
     
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
@@ -38,7 +40,7 @@ def fix_step(src, dst):
     #     bold_text = find_snippet(dst, "** ", " **")
 
 
-def tidyup_translations(folder, output_folder):
+def tidyup_translations(folder, output_folder, dangerous_features):
 
     # tidy up and get absolute paths
     folder = folder.strip().rstrip(os.pathsep).rstrip('"')
@@ -83,7 +85,7 @@ def tidyup_translations(folder, output_folder):
                     if os.path.basename(source_file_path) == "meta.yml":
                         fix_meta(source_file_path, output_file_path)
                     else:
-                        fix_step(source_file_path, output_file_path)
+                        fix_step(source_file_path, output_file_path, dangerous_features)
                 
                 print("Complete")
                     
