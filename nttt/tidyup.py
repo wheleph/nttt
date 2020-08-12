@@ -1,5 +1,5 @@
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
-from .utilities import trim_spaces_on_specific_markdown
+from .cleanup_markup import trim_spaces_on_specific_markdown
 import os
 import os.path
 from pathlib import Path
