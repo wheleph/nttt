@@ -26,23 +26,23 @@ class FileSystemTest(unittest.TestCase):
             Path(source_folder, "file_2").touch()
             Path(source_folder, "file_3").touch()
             (missing_folders, missing_files) = nttt.project.find_missing_entries(source_folder, dest_folder)
-            self.assertEqual(missing_folders, ["folder_1", "folder_2"])
-            self.assertEqual(missing_files, ["file_1", "file_2", "file_3"])
+            self.assertEqual(sorted(missing_folders), ["folder_1", "folder_2"])
+            self.assertEqual(sorted(missing_files), ["file_1", "file_2", "file_3"])
 
             # Add some files to the subfolders.
             Path(source_folder, "folder_1", "file_4").touch()
             Path(source_folder, "folder_1", "file_5").touch()
             Path(source_folder, "folder_2", "file_6").touch()
             (missing_folders, missing_files) = nttt.project.find_missing_entries(source_folder, dest_folder)
-            self.assertEqual(missing_folders, ["folder_1", "folder_2"])
-            self.assertEqual(missing_files, ["file_1", "file_2", "file_3"])
+            self.assertEqual(sorted(missing_folders), ["folder_1", "folder_2"])
+            self.assertEqual(sorted(missing_files), ["file_1", "file_2", "file_3"])
 
             # Add some of the folders and files to destination folder.
             Path(dest_folder, "folder_1").mkdir()
             Path(dest_folder, "file_1").touch()
             (missing_folders, missing_files) = nttt.project.find_missing_entries(source_folder, dest_folder)
-            self.assertEqual(missing_folders, ["folder_2"])
-            self.assertEqual(missing_files, ["file_2", "file_3"])
+            self.assertEqual(sorted(missing_folders), ["folder_2"])
+            self.assertEqual(sorted(missing_files), ["file_2", "file_3"])
 
             # Add the other folders and files to destination folder.
             Path(dest_folder, "folder_2").mkdir()
