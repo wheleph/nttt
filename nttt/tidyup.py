@@ -1,4 +1,5 @@
 from .constants import ArgumentKeyConstants
+from nttt.project import add_missing_entries
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
 
 import os.path
@@ -41,7 +42,7 @@ def tidyup_translations(arguments):
 
     folder = arguments[ArgumentKeyConstants.INPUT]
     output_folder = arguments[ArgumentKeyConstants.OUTPUT]
-    # english_folder = arguments[ArgumentKeyConstants.ENGLISH]
+    english_folder = arguments[ArgumentKeyConstants.ENGLISH]
     language = arguments[ArgumentKeyConstants.LANGUAGE]
     # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
     # final_step = arguments[ArgumentKeyConstants.FINAL]
@@ -73,9 +74,12 @@ def tidyup_translations(arguments):
                 if os.path.basename(source_file_path) == "meta.yml":
                     fix_meta(source_file_path, output_file_path)
                 else:
-                    fix_step(source_file_path, output_file_path, language)
+                    fix_step(source_file_path, language, output_file_path)
 
             print("Complete")
 
     else:
         print("No files found in '{}'".format(folder))
+
+    # add files and folders missing in the output folder
+    add_missing_entries(folder, english_folder, output_folder)
