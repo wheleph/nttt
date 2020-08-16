@@ -1,5 +1,6 @@
 from .constants import ArgumentKeyConstants
 from .utilities import find_files, find_replace, find_snippet, get_file, save_file
+from .tag_trimming import trim_tags
 
 import os.path
 
@@ -27,6 +28,9 @@ def fix_step(src, lang, dst):
 
     # update language in urls
     content = content.replace("/en/", "/" + lang + "/")
+
+    # Trim HTML-like tags
+    content = trim_tags(content, lang)
 
     save_file(dst, content, suggested_eol)
 
