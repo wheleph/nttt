@@ -5,7 +5,6 @@ from .utilities import add_missing_entries, find_files, find_replace, find_snipp
 import yaml
 import os.path
 
-
 def fix_meta(src, english_src, dst):
     (content, suggested_eol) = get_file(src)
     (english_content, _) = get_file(english_src)
@@ -64,6 +63,9 @@ def fix_step(src, lang, dst, disable=[]):
 
     # update language in urls
     content = content.replace("/en/", "/" + lang + "/")
+
+    # Trim HTML-like tags
+    content = trim_tags(content, lang)
 
     save_file(dst, content, suggested_eol)
 
