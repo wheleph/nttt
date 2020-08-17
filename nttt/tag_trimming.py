@@ -16,20 +16,24 @@ def replacement_builder(match):
         It's called by re.sub(). It distinguishes between the opening tags (i.e. <foo>) and closing
         tags (i.e </foo>) so that we know how to fix things. It's also language aware so that we may
         treat specific requirements separately like for example the Dutch trailing hypen which has
-        already been taken care of.
+        already been taken care of. Note we use tha auxiliary variable 'match' so as to avoid calling
+        the 'group()' method over and over again so as to reduce the call overhead.
     """
-    if '/' in match.group(0):
-        if match.group(0)[0] == '<' and ((match.group(0)[-1] != '-' and t_lang == 'nl-NL') or t_lang != 'nl-NL'):
-            return match.group(0)[:-1] + ' ' + match.group(0)[-1]
-        elif match.group(0)[0] == ' ':
-            return match.group(0).lstrip()
-        else:
-            return match.group(0)
+
+    match = matchobj.group(0)
+
+    if '/' in match:
+        if match[-2] != ' ' and ((match[-1] != '-' and t_lang == 'nl-NL') or t_lang != 'nl-NL'):
+            match = match[:-1] + ' ' + match[-1]
+        if match[1] == ' ':
+            match = match[0] + match[1:].lstrip()
     else:
-        if match.group(0)[0] != '<':
-            return match.group(0)[0] + ' ' + match.group(0)[1:]
-        elif match.group(0)[-1] == ' ':
-            return match.group(0).rstrip()
+        if match[1] == '<':
+            match = match[0] + ' ' + match[1:]
+        if match[-2] == ' ':
+            match = match[:-1].rstrip() + match[-1]
+
+    return match
 
 def trim_tags(file_content, lang):
     """
@@ -42,14 +46,10 @@ def trim_tags(file_content, lang):
 
         This function will just get the file's content, update the global t_lang variable
         and begin finding wrongly formatted tags. It'll then return the corrected file
-        content as a string. Note we have nested the calls to re.sub() but that could be
-        easily reverted should it hinder readability.
+        content as a string.
     """
 
     global t_lang
     t_lang = lang
 
-    return re.sub(r'<[\w\d]+>\s+', replacement_builder,
-                    re.sub(r'\S<[\w\d]+>', replacement_builder,
-                        re.sub(r'\s+</[\w\d]+>', replacement_builder,
-                            re.sub(r'</[\w\d]+>\S', replacement_builder, file_content))))
+    return re.sub(r'\S\s*</?[\w\d]+>\s*\S', replacement_builder, file_content)
