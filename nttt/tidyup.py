@@ -1,6 +1,5 @@
 from .constants import ArgumentKeyConstants
-from nttt.project import add_missing_entries
-from .utilities import find_files, find_replace, find_snippet, get_file, save_file
+from .utilities import add_missing_entries, find_files, find_replace, find_snippet, get_file, save_file
 
 import os.path
 
