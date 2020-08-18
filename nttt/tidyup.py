@@ -7,7 +7,7 @@ from pathlib import Path
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, dst, dangerous_features):
+def fix_step(src, dst, dangerous_features=True):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
