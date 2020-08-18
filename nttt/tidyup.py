@@ -1,11 +1,40 @@
 from .constants import ArgumentKeyConstants
-from .utilities import add_missing_entries, find_files, find_replace, find_snippet, get_file, save_file
+from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
+import yaml
 
 import os.path
 
 
-def fix_meta(src, dst):
-    find_replace(src, dst, "  - \n    title:", "  - title:")
+def fix_meta(src, english_src, dst):
+    (content, suggested_eol) = get_file(src)
+    (english_content, _) = get_file(english_src)
+
+    # Fix steps
+    content = content.replace("  - \n    title:", "  - title:")
+
+    # Revert untranslatable elements
+    content = revert_untranslatable_meta_elements(content, english_content)
+
+    save_file(dst, content, suggested_eol)
+
+
+def revert_untranslatable_meta_elements(content, english_content):
+    parsed_md = yaml.safe_load(content)
+    english_parsed_md = yaml.safe_load(english_content)
+
+    translatable_keys = ["title", "description", "steps"]
+    for key in parsed_md:
+        if key not in translatable_keys:
+            parsed_md[key] = english_parsed_md[key]
+
+    class IndentedDumper(yaml.Dumper):
+        def increase_indent(self, flow=False, indentless=False):
+            return super(IndentedDumper, self).increase_indent(flow, False)
+
+    return '---\n' + yaml.dump(parsed_md,
+                                  Dumper=IndentedDumper,
+                                  allow_unicode=True,
+                                  sort_keys=False)
 
 
 def fix_step(src, lang, dst):
@@ -71,7 +100,7 @@ def tidyup_translations(arguments):
 
                 print("Fixing - {}".format(file_name))
                 if os.path.basename(source_file_path) == "meta.yml":
-                    fix_meta(source_file_path, output_file_path)
+                    fix_meta(source_file_path, english_folder, output_file_path)
                 else:
                     fix_step(source_file_path, language, output_file_path)
 
