@@ -51,5 +51,12 @@ class test_tag_trimming(unittest.TestCase):
         self.assertEqual(nttt.tag_trimming.trim_tags(init, 'any_lang'), out_not_dutch)
         self.assertEqual(nttt.tag_trimming.trim_tags(init, 'nl-NL'), out_dutch)
 
+    def test_spaced_tag_content_legitimate(self):
+        init = "In XML every opening tag (<foo>) should have a matching closing tag (</foo>)"
+
+        out = "In XML every opening tag (<foo>) should have a matching closing tag (</foo>)"
+
+        self.assertEqual(nttt.tag_trimming.trim_tags(init, 'any_lang'), out)
+
 if __name__ == '__main__':
     unittest.main()
