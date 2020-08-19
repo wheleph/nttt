@@ -9,6 +9,16 @@ hypen_langs = [
     'nl-NL'
 ]
 
+# These two lists contain characters that don't follow the general rules regarding formatting.
+permitted_end_chars = [
+    '>',
+    ')'
+]
+
+permitted_beg_chars = [
+    '('
+]
+
 # REs
 IN_TEXT_TAG = "\S\s*</?[\w\d]+>\s*\S"
 BEGINNING_TAG = "^<[\w\d]+>\s+\S"
@@ -28,23 +38,32 @@ def replacement_builder(matchobj):
         treat specific requirements separately like for example the Dutch trailing hypen which has
         already been taken care of. Note we use tha auxiliary variable 'match' so as to avoid calling
         the 'group()' method over and over again so as to reduce the call overhead.
-
-        Note the second check on line 28 accounts for the case where we have trailing closing tags.
     """
 
     match = matchobj.group(0)
 
+    # If we are dealing with a closing tag
     if '/' in match:
-        if match[-2] != ' ' and match[-1] != '>' and ((match[-1] != '-' and t_lang in hypen_langs) or t_lang not in hypen_langs):
+        # Check that:
+            # We don't have the needed space
+            # We are not dealing with a special character (take a look at the permitted_* lists)
+            # Whether we are working with a language treating hypens in a special way
+        # If the above aplies, insert the space
+        if match[-2] != ' ' and match[-1] not in permitted_end_chars and ((match[-1] != '-' and t_lang in hypen_langs) or t_lang not in hypen_langs):
             match = match[:-1] + ' ' + match[-1]
+        # If we have spaces within the tag trim them
         if match[1] == ' ':
             match = match[0] + match[1:].lstrip()
+    # If we are dealing with an opeining tag
     else:
-        if match[1] == '<':
+        # If there is no space before the opening '<' and the beginning character is not permitted insert the space
+        if match[1] == '<' and match[0] not in permitted_beg_chars:
             match = match[0] + ' ' + match[1:]
+        # If there is space insed the tag trim it
         if match[-2] == ' ':
             match = match[:-1].rstrip() + match[-1]
 
+    # Return the correct tag we have crafter thorughout the function
     return match
 
 def trim_tags(file_content, lang):
