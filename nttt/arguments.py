@@ -36,14 +36,14 @@ def get_final_step(folder):
     return final_step
 
 
-def parse_command_line():
+def parse_command_line(version):
     '''
     Parses the command line and returns the arguments provided on command line.
     '''
 
     from argparse import ArgumentParser
 
-    parser = ArgumentParser(description="Nina's Translation Tidyup Tool v 0.1.1-SNAPSHOT")
+    parser = ArgumentParser(description="Nina's Translation Tidyup Tool v{}".format(version))
     parser.add_argument("-i", "--input",      help="The input directory which contains the content to tidy up, defaults to the current directory.")
     parser.add_argument("-o", "--output",     help="The output directory where the upgraded content should be written, defaults to the same as INPUT.")
     parser.add_argument("-e", "--english",    help="The directory which contains the English files and folders, defaults to INPUT/../en.")
