@@ -56,7 +56,7 @@ class AssertHelper:
     def assert_fix_step(input_file_content, second_argument, expected_output_file_content):
         """
         - Prepare input file
-        - Run the given function (that takes as arguments names of input and output files)
+        - Run nttt.tidyup.fix_step
         - Assert that the output file has the expected content
         """
         with CustomNamedTemporaryFile(mode="wb", delete=True) as temp_src, \
