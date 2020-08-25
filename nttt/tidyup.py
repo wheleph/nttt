@@ -8,7 +8,7 @@ import os.path
 def fix_meta(src, dst):
     find_replace(src, dst, "  - \n    title:", "  - title:")
 
-def fix_step(src, lang, dst, dangerous_features=True):
+def fix_step(src, lang, dst, disable):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -19,7 +19,7 @@ def fix_step(src, lang, dst, dangerous_features=True):
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
 
-    if dangerous_features == True:
+    if "fix_md" not in disable:
         content = trim_spaces_on_specific_markdown(content)
         
     collapse_error = "--- collapse ---\n\n## title: "
@@ -46,6 +46,7 @@ def tidyup_translations(arguments):
     output_folder = arguments[ArgumentKeyConstants.OUTPUT]
     english_folder = arguments[ArgumentKeyConstants.ENGLISH]
     language = arguments[ArgumentKeyConstants.LANGUAGE]
+    disable = arguments[ArgumentKeyConstants.DISABLE]
     # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
     # final_step = arguments[ArgumentKeyConstants.FINAL]
 
@@ -76,7 +77,7 @@ def tidyup_translations(arguments):
                 if os.path.basename(source_file_path) == "meta.yml":
                     fix_meta(source_file_path, output_file_path)
                 else:
-                    fix_step(source_file_path, language, output_file_path)
+                    fix_step(source_file_path, language, output_file_path, disable)
 
             print("Complete")
 
