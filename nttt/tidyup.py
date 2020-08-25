@@ -1,4 +1,4 @@
-from .cleanup_markup import trim_spaces_on_specific_markdown
+from .cleanup_markdown import trim_spaces_on_specific_markdown
 import os
 from .constants import ArgumentKeyConstants
 from .utilities import add_missing_entries, find_files, find_replace, find_snippet, get_file, save_file
