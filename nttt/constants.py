@@ -10,3 +10,4 @@ class ArgumentKeyConstants:
     LANGUAGE = 'LANGUAGE'
     VOLUNTEERS = 'VOLUNTEERS'
     FINAL = 'FINAL'
+    DISABLE = 'DISABLE'

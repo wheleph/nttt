@@ -50,6 +50,7 @@ def parse_command_line():
     parser.add_argument("-l", "--language",   help="The language of the content to be tidied up, defaults to basename(INPUT).")
     parser.add_argument("-v", "--volunteers", help="The list of volunteers as a comma separated list, defaults to an empty list.")
     parser.add_argument("-f", "--final",      help="The number of the final step file, defaults to the step file with the highest number.")
+    parser.add_argument("-d", "--disable",      help="The risky features to be disabled, separated by comma. Options are fix_md,fix_html. Defaults to all risky features to be used.")
     return parser.parse_args()
 
 
@@ -93,6 +94,12 @@ def resolve_arguments(command_line_args):
     else:
         arguments[ArgumentKeyConstants.FINAL] = get_final_step(arguments[ArgumentKeyConstants.INPUT])
 
+    if command_line_args.disable:
+        arguments[ArgumentKeyConstants.DISABLE] = command_line_args.disable.split(",")
+    else:
+        arguments[ArgumentKeyConstants.DISABLE] = []
+
+
     return arguments
 
 
@@ -108,6 +115,7 @@ def show_arguments(arguments):
     print("Language - '{}'".format(arguments[ArgumentKeyConstants.LANGUAGE]))
     print("Volunteers - '{}'".format(arguments[ArgumentKeyConstants.VOLUNTEERS]))
     print("Final step - '{}'".format(arguments[ArgumentKeyConstants.FINAL]))
+    print("Disable risky functions - '{}'".format(arguments[ArgumentKeyConstants.DISABLE]))
 
 
 def check_folder(folder):

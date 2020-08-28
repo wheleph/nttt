@@ -1,7 +1,8 @@
+from .cleanup_markdown import trim_spaces_on_specific_markdown
+import os
 from .constants import ArgumentKeyConstants, GeneralConstants
-from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
+from .utilities import add_missing_entries, find_files, find_replace, find_snippet, get_file, save_file
 import yaml
-
 import os.path
 
 
@@ -41,8 +42,7 @@ def revert_untranslatable_meta_elements(content, english_content):
                                allow_unicode=True,
                                sort_keys=False)
 
-
-def fix_step(src, lang, dst):
+def fix_step(src, lang, dst, disable=[]):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -53,6 +53,9 @@ def fix_step(src, lang, dst):
     content = content.replace('{: target = " blank"}', '{:target="blank"}')
     content = content.replace("\n` ", "\n`")
 
+    if "fix_md" not in disable:
+        content = trim_spaces_on_specific_markdown(content)
+        
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
     while collapse_title is not None:
@@ -76,6 +79,7 @@ def tidyup_translations(arguments):
     output_folder = arguments[ArgumentKeyConstants.OUTPUT]
     english_folder = arguments[ArgumentKeyConstants.ENGLISH]
     language = arguments[ArgumentKeyConstants.LANGUAGE]
+    disable = arguments[ArgumentKeyConstants.DISABLE]
     # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
     # final_step = arguments[ArgumentKeyConstants.FINAL]
 
@@ -106,7 +110,7 @@ def tidyup_translations(arguments):
                 if os.path.basename(source_file_path) == GeneralConstants.FILE_NAME_META_YML:
                     fix_meta(source_file_path, os.path.join(english_folder, GeneralConstants.FILE_NAME_META_YML), output_file_path)
                 else:
-                    fix_step(source_file_path, language, output_file_path)
+                    fix_step(source_file_path, language, output_file_path, disable)
 
             print("Complete")
 
