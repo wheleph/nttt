@@ -64,9 +64,6 @@ def fix_step(src, lang, dst, disable=[]):
     # update language in urls
     content = content.replace("/en/", "/" + lang + "/")
 
-    # Trim HTML-like tags
-    content = trim_tags(content, lang)
-
     save_file(dst, content, suggested_eol)
 
     # doesnt work...  needs thinking about!
