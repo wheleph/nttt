@@ -24,6 +24,13 @@ def find_snippet(s, start_string, end_string):
     else:
         return None
 
+def find_replace(src, dst, find, replace):
+    with open(src, encoding='utf-8') as f:
+        s = f.read()
+    (_, suggested_eol) = eol.eol_info_from_path(src)
+    s = s.replace(find, replace)
+    with open(dst, encoding='utf-8', mode="w", newline=suggested_eol) as f:
+        f.write(s)
 
 def find_files(src, file_names=[], extensions=[]):
     files_found = []
