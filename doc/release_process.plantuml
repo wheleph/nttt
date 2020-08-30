@@ -17,19 +17,19 @@ repeat
   ->no;
   :put version //a.b.c// in //nttt/_version.py//;
 
-  :create **pre-release** //a.b.c//
+  :create **pre-release** //**v**a.b.c//
   from branch //improvements//;
 
   :increment version in //improvements//:
   put //x.y.z-SNAPSHOT// in //nttt/_version.py//;
 
   :customer testing of
-  pre-release //a.b.c//;
+  pre-release //va.b.c//;
 
   backward: fix bugs in //improvements//;
 
   note right
-    //a.b.c// will remain as
+    //va.b.c// will remain as
     **pre-**release forever;
     the loop will be repeated for
     //x.y.z// instead of //a.b.c//
@@ -38,7 +38,7 @@ repeat while (bugs found?) is (yes)
 ->no;
 
 :remove pre-release flag from
-release //a.b.c//;
+release //va.b.c//;
 
 :do **fast-forward merge** from
 //improvements// to //stable//;
