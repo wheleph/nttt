@@ -1,0 +1,53 @@
+@startuml
+start
+
+:branch //improvements//
+is ready for release;
+
+note right
+  //nttt/_version.py// has version //a.b.c-SNAPSHOT//
+end note
+
+repeat
+  repeat
+    :developer testing of code
+    from //improvements// is performed;
+    backward: fix bugs in //improvements//;
+  repeat while (bugs found?)  is (yes)
+  ->no;
+  :put version //a.b.c// in //nttt/_version.py//;
+
+  :create **pre-release** //a.b.c//
+  from branch //improvements//;
+
+  :increment version in //improvements//:
+  put //x.y.z-SNAPSHOT// in //nttt/_version.py//;
+
+  :customer testing of
+  pre-release //a.b.c//;
+
+  backward: fix bugs in //improvements//;
+
+  note right
+    //a.b.c// will remain as
+    **pre-**release forever;
+    the loop will be repeated for
+    //x.y.z// instead of //a.b.c//
+  end note
+repeat while (bugs found?) is (yes)
+->no;
+
+:remove pre-release flag from
+release //a.b.c//;
+
+:do **fast-forward merge** from
+//improvements// to //stable//;
+
+note right
+  to ensure that //stable// points
+  to exactly the same code
+that was tested in //improvements//
+end note
+
+stop
+@enduml
