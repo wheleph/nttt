@@ -1,9 +1,8 @@
-from .cleanup_markdown import trim_spaces_on_specific_markdown
-import os
+import os, yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
-from .utilities import add_missing_entries, find_files, find_replace, find_snippet, get_file, save_file
-import yaml
-import os.path
+from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
+from .cleanup_markdown import trim_spaces_on_specific_markdown
+from .tag_trimming import trim_tags
 
 
 def fix_meta(src, english_src, dst):
@@ -42,7 +41,8 @@ def revert_untranslatable_meta_elements(content, english_content):
                                allow_unicode=True,
                                sort_keys=False)
 
-def fix_step(src, lang, dst, disable=[]):
+
+def fix_step(src, lang, dst, disable=()):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -55,6 +55,9 @@ def fix_step(src, lang, dst, disable=[]):
 
     if "fix_md" not in disable:
         content = trim_spaces_on_specific_markdown(content)
+
+    if "fix_html" not in disable:
+        content = trim_tags(content)
         
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
