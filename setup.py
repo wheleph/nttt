@@ -1,4 +1,5 @@
 import sys
+import os
 from setuptools import setup
 
 if sys.version_info[0] == 2:
@@ -9,9 +10,14 @@ elif sys.version_info[0] == 3:
 else:
     raise ValueError('Unrecognized major version of Python')
 
+# Read version
+version_globals = {}
+with open(os.path.join("nttt", "_version.py")) as fp:
+    exec(fp.read(), version_globals)
+
 __project__ = 'nttt'
 __desc__ = 'A utility for Nina to clean up translated projects'
-__version__ = '0.1.1-SNAPSHOT'
+__version__ = version_globals['__version__']
 __author__ = "Martin O'Hanlon"
 __author_email__ = 'martin.ohanlon@raspberrypi.org'
 __url__ = 'https://github.com/raspberrypilearning/nttt'
