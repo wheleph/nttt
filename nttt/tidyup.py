@@ -1,7 +1,7 @@
 import os, yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
-from .cleanup_markdown import trim_spaces_on_specific_markdown
+from .cleanup_markdown import trim_md_tags
 from .tag_trimming import trim_tags
 
 
@@ -54,7 +54,7 @@ def fix_step(src, lang, dst, disable=()):
     content = content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:
-        content = trim_spaces_on_specific_markdown(content)
+        content = trim_md_tags(content)
 
     if "fix_html" not in disable:
         content = trim_tags(content)
