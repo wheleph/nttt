@@ -39,7 +39,8 @@ def revert_untranslatable_meta_elements(content, english_content):
     return '---\n' + yaml.dump(parsed_md,
                                Dumper=IndentedDumper,
                                allow_unicode=True,
-                               sort_keys=False)
+                               sort_keys=False,
+                               width=160)
 
 
 def fix_step(src, lang, dst, disable=()):
@@ -58,7 +59,7 @@ def fix_step(src, lang, dst, disable=()):
 
     if "fix_html" not in disable:
         content = trim_tags(content)
-        
+
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
     while collapse_title is not None:
