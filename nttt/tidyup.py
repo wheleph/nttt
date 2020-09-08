@@ -40,7 +40,7 @@ def revert_untranslatable_meta_elements(content, english_content):
                                Dumper=IndentedDumper,
                                allow_unicode=True,
                                sort_keys=False,
-                               width=160)
+                               width=1000000)
 
 
 def fix_step(src, lang, dst, disable=()):
