@@ -1,4 +1,5 @@
-import re, nttt_logging
+import re
+import nttt_logging
 
 
 def trim_tags(file_content):

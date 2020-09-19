@@ -1,4 +1,5 @@
-import re, nttt_logging
+import re
+import nttt_logging
 
 def trim_md_tags(file_content):
     return re.sub(r'(?P<tag>`|_{1,3}|\*{1,3})(?P<content>.+?)(?P=tag)', replacement_builder, file_content)
