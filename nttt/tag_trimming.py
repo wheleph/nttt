@@ -1,5 +1,5 @@
 import re
-import nttt_logging
+from .nttt_logging import nttt_display
 
 
 def trim_tags(file_content):
@@ -9,5 +9,5 @@ def trim_tags(file_content):
 def replacement_builder(matchobj):
     tag_name = matchobj.group("tag")
     stripped_content = matchobj.group("content").strip()
-    nttt_logging.display(tag_name, matchobj.group("content"), stripped_content)
+    nttt_display(tag_name, matchobj.group("content"), stripped_content)
     return "<{}>{}</{}>".format(tag_name, stripped_content, tag_name)
