@@ -11,3 +11,4 @@ class ArgumentKeyConstants:
     VOLUNTEERS = 'VOLUNTEERS'
     FINAL = 'FINAL'
     DISABLE = 'DISABLE'
+    LOGGING = 'LOGGING'

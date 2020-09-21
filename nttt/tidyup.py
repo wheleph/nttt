@@ -43,7 +43,7 @@ def revert_untranslatable_meta_elements(content, english_content):
                                width=1000000)
 
 
-def fix_step(src, lang, dst, disable=()):
+def fix_step(src, lang, dst, disable=(), logging="off"):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
@@ -55,10 +55,10 @@ def fix_step(src, lang, dst, disable=()):
     content = content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:
-        content = trim_md_tags(content)
+        content = trim_md_tags(content, logging)
 
     if "fix_html" not in disable:
-        content = trim_tags(content)
+        content = trim_tags(content, logging)
 
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
@@ -84,6 +84,7 @@ def tidyup_translations(arguments):
     english_folder = arguments[ArgumentKeyConstants.ENGLISH]
     language = arguments[ArgumentKeyConstants.LANGUAGE]
     disable = arguments[ArgumentKeyConstants.DISABLE]
+    logging = arguments[ArgumentKeyConstants.LOGGING]
     # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
     # final_step = arguments[ArgumentKeyConstants.FINAL]
 
@@ -114,7 +115,7 @@ def tidyup_translations(arguments):
                 if os.path.basename(source_file_path) == GeneralConstants.FILE_NAME_META_YML:
                     fix_meta(source_file_path, os.path.join(english_folder, GeneralConstants.FILE_NAME_META_YML), output_file_path)
                 else:
-                    fix_step(source_file_path, language, output_file_path, disable)
+                    fix_step(source_file_path, language, output_file_path, disable, logging)
 
             print("Complete")
 

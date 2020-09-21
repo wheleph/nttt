@@ -57,6 +57,7 @@ class TestArguments(unittest.TestCase):
                 self.volunteers = False
                 self.final = False
                 self.disable = False
+                self.logging = False
 
         # Using the os.chdir function for a subdirectory of a directory created
         # with TemporaryDirectory doesn't work on Windows and macOS. Therefore,
@@ -81,6 +82,7 @@ class TestArguments(unittest.TestCase):
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.VOLUNTEERS], [])
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.FINAL], 0)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.DISABLE], [])
+        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.LOGGING], "off")
 
         input_folder = Path(data_folder, "da-DK")
         output_folder = Path(data_folder, "output")
@@ -103,6 +105,7 @@ class TestArguments(unittest.TestCase):
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.VOLUNTEERS], ["Volunteer One", "Volunteer Two"])
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.FINAL], 5)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.DISABLE], [])
+        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.LOGGING], "off")
 
     def test_check_folder(self):
         ''' Test case for the check_folder function:
