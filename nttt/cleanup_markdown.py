@@ -1,7 +1,7 @@
 import re
 from .nttt_logging import nttt_display_md
 
-def trim_md_tags(file_content, logging):
+def trim_md_tags(file_content, logging="off"):
     if logging == "off":
         return re.sub(r'(?P<tag>`|_{1,3}|\*{1,3})(?P<content>.+?)(?P=tag)', replacement_builder, file_content)
     elif logging == "on":
