@@ -55,10 +55,10 @@ def fix_step(src, lang, dst, disable=(), logging="off"):
     content = content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:
-        content = trim_md_tags(content, logging)
+        content = trim_md_tags(content, logging="off")
 
     if "fix_html" not in disable:
-        content = trim_tags(content, logging)
+        content = trim_tags(content, logging="off")
 
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(content, collapse_error, "\n")
