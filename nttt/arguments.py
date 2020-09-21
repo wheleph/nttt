@@ -103,7 +103,7 @@ def resolve_arguments(command_line_args):
     if command_line_args.logging:
         arguments[ArgumentKeyConstants.LOGGING] = command_line_args.logging
     else:
-        arguments[ArgumentKeyConstants.DISABLE] = "off"
+        arguments[ArgumentKeyConstants.LOGGING] = "off"
 
 
     return arguments
