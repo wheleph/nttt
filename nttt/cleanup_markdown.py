@@ -1,5 +1,5 @@
 import re
-from .nttt_logging import nttt_display_md
+from .nttt_logging import display_md
 
 
 def trim_md_tags(file_content, logging="off"):
@@ -11,7 +11,7 @@ def replacement_builder(logging):
         tag_name = matchobj.group("tag")
         stripped_content = matchobj.group("content").strip()
         if logging == "on":
-            nttt_display_md(tag_name, matchobj.group("content"), stripped_content)
+            display_md(tag_name, matchobj.group("content"), stripped_content)
         return "{}{}{}".format(tag_name, stripped_content, tag_name)
 
     return internal_replacement_builder

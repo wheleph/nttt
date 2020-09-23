@@ -43,7 +43,7 @@ def revert_untranslatable_meta_elements(content, english_content):
                                width=1000000)
 
 
-def fix_step(src, lang, dst, disable=(), logging="off"):
+def fix_step(src, lang, dst, disable=()):
     content, suggested_eol = get_file(src)
     content = content.replace("\---", "---")
     content = content.replace("## ---", "---")
