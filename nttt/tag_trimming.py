@@ -12,6 +12,6 @@ def replacement_builder(logging):
         stripped_content = matchobj.group("content").strip()
         if logging == "on":
             display_tags(tag_name, matchobj.group("content"), stripped_content)
-        return "{}{}{}".format(tag_name, stripped_content, tag_name)
+        return "<{}>{}</{}>".format(tag_name, stripped_content, tag_name)
 
     return internal_replacement_builder
