@@ -2,7 +2,7 @@ import re
 from .nttt_logging import display_tags
 
 
-def trim_tags(file_content, logging="off"):
+def trim_tags(file_content, logging):
     return re.sub(r'<(?P<tag>[\w\d]+?)>(?P<content>.+?)</(?P=tag)>', replacement_builder(logging), file_content)
 
 
