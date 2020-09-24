@@ -64,7 +64,7 @@ class AssertHelper:
             temp_src.write(input_file_content.encode('utf-8'))
             temp_src.flush()
 
-            nttt.tidyup.fix_step(temp_src.name, second_argument, temp_dest.name)
+            nttt.tidyup.fix_step(temp_src.name, second_argument, temp_dest.name, (), "off")
 
             result = temp_dest.read().decode('utf-8')
             unittest.TestCase().assertEqual(result, expected_output_file_content)
