@@ -2,7 +2,7 @@ import os, yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
 from .cleanup_markdown import trim_md_tags
-from .tag_trimming import trim_tags
+from .cleanup_html import trim_html_tags
 
 
 def fix_meta(src, english_src, dst):
@@ -43,33 +43,33 @@ def revert_untranslatable_meta_elements(content, english_content):
                                width=1000000)
 
 
-def fix_step(src, lang, dst, disable, logging):
-    content, suggested_eol = get_file(src)
-    content = content.replace("\---", "---")
-    content = content.replace("## ---", "---")
-    content = content.replace("--- hints ---", "--- hints ---\n")
-    content = content.replace(" --- hint --- ", "--- hint ---\n")
-    content = content.replace(" --- /hint ---", "\n--- /hint ---\n")
-    content = content.replace(" --- /hints ---", "--- /hints ---")
-    content = content.replace('{: target = " blank"}', '{:target="blank"}')
-    content = content.replace("\n` ", "\n`")
+def fix_md_step(src, lang, dst, disable, logging):
+    md_content, suggested_eol = get_file(src)
+    md_content = md_content.replace("\---", "---")
+    md_content = md_content.replace("## ---", "---")
+    md_content = md_content.replace("--- hints ---", "--- hints ---\n")
+    md_content = md_content.replace(" --- hint --- ", "--- hint ---\n")
+    md_content = md_content.replace(" --- /hint ---", "\n--- /hint ---\n")
+    md_content = md_content.replace(" --- /hints ---", "--- /hints ---")
+    md_content = md_content.replace('{: target = " blank"}', '{:target="blank"}')
+    md_content = md_content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:
-        content = trim_md_tags(content, logging)
+        md_content = trim_md_tags(md_content, logging)
 
     if "fix_html" not in disable:
-        content = trim_tags(content, logging)
+        md_content = trim_html_tags(md_content, logging)
 
     collapse_error = "--- collapse ---\n\n## title: "
-    collapse_title = find_snippet(content, collapse_error, "\n")
+    collapse_title = find_snippet(md_content, collapse_error, "\n")
     while collapse_title is not None:
-        content = content.replace(collapse_error + collapse_title + "\n", "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
-        collapse_title = find_snippet(content, collapse_error, "\n")
+        md_content = md_content.replace(collapse_error + collapse_title + "\n", "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
+        collapse_title = find_snippet(md_content, collapse_error, "\n")
 
     # update language in urls
-    content = content.replace("/en/", "/" + lang + "/")
+    md_content = md_content.replace("/en/", "/" + lang + "/")
 
-    save_file(dst, content, suggested_eol)
+    save_file(dst, md_content, suggested_eol)
 
     # doesnt work...  needs thinking about!
     # bold_text = find_snippet(dst, "** ", " **")
@@ -115,7 +115,7 @@ def tidyup_translations(arguments):
                 if os.path.basename(source_file_path) == GeneralConstants.FILE_NAME_META_YML:
                     fix_meta(source_file_path, os.path.join(english_folder, GeneralConstants.FILE_NAME_META_YML), output_file_path)
                 else:
-                    fix_step(source_file_path, language, output_file_path, disable, logging)
+                    fix_md_step(source_file_path, language, output_file_path, disable, logging)
 
             print("Complete")
 
