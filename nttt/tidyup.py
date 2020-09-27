@@ -2,7 +2,7 @@ import os, yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
 from .cleanup_markdown import trim_md_tags
-from .tag_trimming import trim_html_tags
+from .cleanup_html import trim_html_tags
 
 
 def fix_meta(src, english_src, dst):
