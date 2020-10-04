@@ -2,7 +2,7 @@ import unittest
 from nttt import cleanup_markdown
 
 
-class TestTrimSpaces(unittest.TestCase):
+class TestCleanupMarkdown(unittest.TestCase):
     def test_all_spaces(self):
         c_initial = 'asd _ fgh _ asd ` ghj ` asd ** hjk ** asd * uio * asd'
         c_target = 'asd _fgh_ asd `ghj` asd **hjk** asd *uio* asd'
@@ -83,9 +83,34 @@ class TestTrimSpaces(unittest.TestCase):
         c_target = 'asd __f_Gh76__ asd ___g23_hJ___ asd'
         self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
 
-    def test_md_indside_backquotes(self):
+    def test_md_inside_backquotes(self):
         c_initial = '`foo ** bar ** baz`'
         c_target = '`foo ** bar ** baz`'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
+    def test_list_item(self):
+        c_initial = '* list item 1'
+        c_target = '* list item 1'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
+    def test_list_item_italic(self):
+        c_initial = '* list item * 1 *'
+        c_target = '* list item *1*'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
+    def test_list_item_italic_multiline(self):
+        c_initial = '* list item * 1 *\n* list item * 2 *'
+        c_target = '* list item *1*\n* list item *2*'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
+    def test_list_item_italic_with_whitespaces(self):
+        c_initial = ' \t* list item * 1 *'
+        c_target = ' \t* list item *1*'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
+    def test_italic_start(self):
+        c_initial = '* not a list item *'
+        c_target = '*not a list item*'
         self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
 
     def test_misc(self):
