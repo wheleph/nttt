@@ -2,7 +2,7 @@ import unittest
 from nttt import cleanup_html
 
 
-class TestTagTrimming(unittest.TestCase):
+class TestCleanupHtml(unittest.TestCase):
     def test_inside_spaces(self):
         init = "<p>   foo     </p>"
 
