@@ -83,6 +83,19 @@ class TestCleanupHtml(unittest.TestCase):
 
         self.assertEqual(cleanup_html.trim_html_tags(init, "off"), out)
 
+    def test_tripple_backtick(self):
+        init = '<h1> some text </h1> \n' \
+               '```\n' \
+               ' <h3> some text </h3> \n' \
+               '```\n ' \
+               '<h2> some other text </h2>'
+        out = '<h1>some text</h1> \n' \
+              '```\n' \
+              ' <h3> some text </h3> \n' \
+              '```\n ' \
+              '<h2>some other text</h2>'
+        self.assertEqual(cleanup_html.trim_html_tags(init, "off"), out)
+
 
 if __name__ == '__main__':
     unittest.main()

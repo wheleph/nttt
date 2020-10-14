@@ -1,5 +1,5 @@
 import unittest
-from unit_test.test_utilities import AssertHelper
+from unit_test.test_helpers import AssertHelper
 
 
 class TestMetadataValidation(unittest.TestCase):

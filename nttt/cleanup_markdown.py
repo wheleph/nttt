@@ -1,8 +1,13 @@
 import re
 from .nttt_logging import display_md
+from .utilities import apply_to_every_other_part
 
 
 def trim_md_tags(md_file_content, logging):
+    return apply_to_every_other_part(md_file_content, "```", __trim_md_tags, logging)
+
+
+def __trim_md_tags(md_file_content, logging):
     lines = md_file_content.split("\n")
     trimmed_lines = []
     for i in range(len(lines)):
@@ -11,7 +16,7 @@ def trim_md_tags(md_file_content, logging):
 
         is_list_item = star_count % 2 == 1 and line.lstrip().startswith("*")
         if not is_list_item:
-            trimmed_lines.append(__trim_md_tags(line, logging))
+            trimmed_lines.append(__trim_md_tags_in_line(line, logging))
         else:
             star_index = line.index("*")
             next_after_star_index = star_index + 1
@@ -19,12 +24,12 @@ def trim_md_tags(md_file_content, logging):
             list_marker = line[:next_after_star_index]
             list_item_text = line[next_after_star_index:]
 
-            trimmed_lines.append(list_marker + __trim_md_tags(list_item_text, logging))
+            trimmed_lines.append(list_marker + __trim_md_tags_in_line(list_item_text, logging))
 
     return '\n'.join(trimmed_lines)
 
 
-def __trim_md_tags(s, logging):
+def __trim_md_tags_in_line(s, logging):
     return re.sub(r'(?P<tag>`|_{1,3}|\*{1,3})(?P<content>.+?)(?P=tag)', replacement_builder(logging), s)
 
 
