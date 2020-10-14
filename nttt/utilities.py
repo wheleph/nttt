@@ -145,3 +145,22 @@ def add_missing_entries(input_folder, english_folder, output_folder):
     (folders_to_copy, files_to_copy) = find_missing_entries(english_folder, output_folder)
     if len(folders_to_copy) > 0:
         copy_missing_folders(english_folder, folders_to_copy, output_folder)
+
+
+def apply_to_every_other_part(content, separator, func, param1):
+    """
+    Splits the content by the given separator
+    and applies the given function to every other part (0th, 2nd, 4th and so on)
+    keeping the rest (1st, 3rd, 5th and so on) intact
+    """
+    parts = content.split(separator)
+    processed_parts = []
+
+    for i in range(len(parts)):
+        part = parts[i]
+        if (i % 2) == 0:
+            processed_parts.append(func(part, param1))
+        else:
+            processed_parts.append(parts[i])
+
+    return separator.join(processed_parts)

@@ -1,20 +1,14 @@
 import re
 from .nttt_logging import display_tags
+from .utilities import apply_to_every_other_part
 
 
 def trim_html_tags(md_file_content, logging):
     # The idea of this loop is to detect text that goes inside backquotes (`) and keep that text unchanged.
     # This is because in Markdown files backquotes enclose code snippets that usually should be not be changed.
     # We achieve this by splitting the content by backquotes and applying html trimming to every other part.
-    parts = md_file_content.split("`")
-    trimmed_parts = []
-    for i in range(len(parts)):
-        if (i % 2) == 0:
-            trimmed_parts.append(__trim_html_tags(parts[i], logging))
-        else:
-            trimmed_parts.append(parts[i])
-
-    return '`'.join(trimmed_parts)
+    # Due to rather lucky coincidence this code also takes care of not changing content inside triple backquotes (```)
+    return apply_to_every_other_part(md_file_content, "`", __trim_html_tags, logging)
 
 
 def __trim_html_tags(s, logging):

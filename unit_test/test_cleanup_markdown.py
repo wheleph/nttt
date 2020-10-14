@@ -113,6 +113,19 @@ class TestCleanupMarkdown(unittest.TestCase):
         c_target = '*not a list item*'
         self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
 
+    def test_tripple_backtick(self):
+        c_initial = '* some text * \n' \
+                    '```\n' \
+                    ' 3! = 3 * 2 * 1 \n' \
+                    '```\n ' \
+                    '_ some other text _'
+        c_target = '*some text* \n' \
+                   '```\n' \
+                   ' 3! = 3 * 2 * 1 \n' \
+                   '```\n' \
+                   ' _some other text_'
+        self.assertEqual(cleanup_markdown.trim_md_tags(c_initial, "off"), c_target)
+
     def test_misc(self):
         c_initial = "`de hele tijd` en `bij opstarten`"
         c_target = "`de hele tijd` en `bij opstarten`"
