@@ -9,7 +9,7 @@ Note - NTTT will work on Windows, macOS and Linux.
 To install NTTT, clone the repository and use `pip3` to install:
 
 ```bash
-git clone https://github.com/raspberrypilearning/nttt
+git clone https://github.com/wheleph/nttt
 cd nttt
 pip3 install -r requirements.txt
 pip3 install . --upgrade
@@ -138,8 +138,8 @@ examples of usage:
 
   nttt -i path/to/project/de-DE -o ../output -e some/other/path/en -l hi-IN \
        -v "Volunteer Translator, Volunteer Reviewer, Volunteer Tester" -f 7
-	Use path/to/project/de-DE as input directory, ../output as output
-	directory, some/other/path/en as English directory, and hi-IN as
+    Use path/to/project/de-DE as input directory, ../output as output
+    directory, some/other/path/en as English directory, and hi-IN as
     language. Three volunteer names are added to the final step file:
     "Volunteer Translator", "Volunteer Reviewer" and "Volunteer Tester".
     File step_7.md will be used as final step file.
