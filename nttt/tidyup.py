@@ -24,7 +24,7 @@ def revert_untranslatable_meta_elements(content, english_content):
 
     translatable_keys = ["title", "description", "steps"]
     for key in parsed_md:
-        if key not in translatable_keys:
+        if key not in translatable_keys and key in english_parsed_md:
             parsed_md[key] = english_parsed_md[key]
 
     class IndentedDumper(yaml.Dumper):

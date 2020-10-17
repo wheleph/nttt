@@ -29,6 +29,19 @@ class TestMetadataValidation(unittest.TestCase):
             "steps:\n"
             "  - title: Вступ\n")
 
+    def test_extra_fields(self):
+        AssertHelper.assert_fix_meta(
+            "---\n"
+            "title: Про мене\n"
+            "technologies: python\n",
+
+            "---\n"
+            "title: About me\n",
+
+            "---\n"
+            "title: Про мене\n"
+            "technologies: python\n")
+
 
 if __name__ == '__main__':
     unittest.main()
