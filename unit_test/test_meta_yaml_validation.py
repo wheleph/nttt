@@ -42,6 +42,26 @@ class TestMetadataValidation(unittest.TestCase):
             "title: Про мене\n"
             "technologies: python\n")
 
+    def test_cn_steps(self):
+        AssertHelper.assert_fix_meta(
+            "---\n"
+            "title: 剪刀、石头、布\n"
+            "description: 创建你自己的“剪刀、石头、布”游戏。\n"
+            "steps:\n"
+            "  - title: '挑战：ASCII码图像'\n",
+
+            "---\n"
+            "title: Rock, Paper, Scissors\n"
+            "description: Create your own 'Rock, Paper Scissors' game.\n"
+            "steps:\n"
+            "  - title: 'Challenge: ASCII Art'\n",
+
+            "---\n"
+            "title: 剪刀、石头、布\n"
+            "description: 创建你自己的“剪刀、石头、布”游戏。\n"
+            "steps:\n"
+            "  - title: '挑战：ASCII码图像'\n")
+
 
 if __name__ == '__main__':
     unittest.main()
