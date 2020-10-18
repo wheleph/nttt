@@ -1,4 +1,6 @@
-import os, yaml
+import os
+import io
+import ruamel.yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
 from .cleanup_markdown import trim_md_tags
@@ -19,28 +21,23 @@ def fix_meta(src, english_src, dst):
 
 
 def revert_untranslatable_meta_elements(content, english_content):
-    parsed_md = yaml.safe_load(content)
-    english_parsed_md = yaml.safe_load(english_content)
+    parsed_md = ruamel.yaml.round_trip_load(content, preserve_quotes=True)
+    english_parsed_md = ruamel.yaml.round_trip_load(english_content, preserve_quotes=True)
 
     translatable_keys = ["title", "description", "steps"]
     for key in parsed_md:
-        if key not in translatable_keys:
+        if key not in translatable_keys and key in english_parsed_md:
             parsed_md[key] = english_parsed_md[key]
 
-    class IndentedDumper(yaml.Dumper):
-        """
-        There are different ways to print sequence elements in YAML. They may or may not be indented.
-        This class is needed to make the indented (to preserve existing behaviour of the program).
-        See https://stackoverflow.com/a/39681672/15647 for more details
-        """
-        def increase_indent(self, flow=False, indentless=False):
-            return super(IndentedDumper, self).increase_indent(flow, False)
+    yaml_dumper = ruamel.yaml.YAML()
+    yaml_dumper.indent(sequence=4, offset=2)
+    yaml_dumper.explicit_start = True
+    yaml_dumper.width = 1000000
 
-    return '---\n' + yaml.dump(parsed_md,
-                               Dumper=IndentedDumper,
-                               allow_unicode=True,
-                               sort_keys=False,
-                               width=1000000)
+    string_buffer = io.StringIO()
+    yaml_dumper.dump(parsed_md, string_buffer)
+    string_buffer.seek(0)
+    return string_buffer.read()
 
 
 def fix_md_step(src, lang, dst, disable, logging):
