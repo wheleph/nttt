@@ -36,12 +36,13 @@ def revert_untranslatable_meta_elements(content, english_content):
         if key not in translatable_keys and key in english_parsed_md:
             parsed_md[key] = english_parsed_md[key]
 
-    yaml_parser.indent(sequence=4, offset=2)
-    yaml_parser.explicit_start = True
-    yaml_parser.width = 1000000
+    yaml_dumper = ruamel.yaml.YAML()
+    yaml_dumper.indent(sequence=4, offset=2)
+    yaml_dumper.explicit_start = True
+    yaml_dumper.width = 1000000
 
     string_buffer = io.StringIO()
-    yaml_parser.dump(parsed_md, string_buffer)
+    yaml_dumper.dump(parsed_md, string_buffer)
     string_buffer.seek(0)
     return string_buffer.read()
 
