@@ -62,6 +62,20 @@ class TestMetadataValidation(unittest.TestCase):
             "steps:\n"
             "  - title: '挑战：ASCII码图像'\n")
 
+    def test_incorrect_date(self):
+        AssertHelper.assert_fix_meta(
+            "---\n"
+            "duration: 2\n"
+            "last_tested: 2018-22-01\n",
+
+            "---\n"
+            "duration: 2\n"            
+            "last_tested: 2018-22-01\n",
+
+            "---\n"
+            "duration: 2\n"            
+            "last_tested: 2018-22-01\n")
+
 
 if __name__ == '__main__':
     unittest.main()
