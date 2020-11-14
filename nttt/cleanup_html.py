@@ -1,5 +1,5 @@
 import re
-from .nttt_logging import display_tags
+from .nttt_logging import display_html
 from .utilities import apply_to_every_other_part
 
 
@@ -20,7 +20,7 @@ def replacement_builder(logging):
         tag_name = matchobj.group("tag")
         stripped_content = matchobj.group("content").strip()
         if logging == "on":
-            display_tags(tag_name, matchobj.group("content"), stripped_content)
+            display_html(tag_name, matchobj.group("content"), stripped_content)
         return "<{}>{}</{}>".format(tag_name, stripped_content, tag_name)
 
     return internal_replacement_builder
