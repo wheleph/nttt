@@ -2,7 +2,7 @@ import re
 
 
 def trim_formatting_tags(md_file_content, logging):
-    return re.sub(r'{\s*:\s*(?P<tag>[\w]+?)\s*=\s*"(?P<content>.+?)"\s*}',
+    return re.sub(r'(?P<last_word>\S+?)\s*{\s*:\s*(?P<tag>[\w]+?)\s*=\s*"(?P<value>.+?)"\s*}',
                   replacement_builder(logging),
                   md_file_content)
 
@@ -10,10 +10,11 @@ def trim_formatting_tags(md_file_content, logging):
 def replacement_builder(logging):
     def internal_replacement_builder(matchobj):
         original_text = matchobj.group()
+        last_word = matchobj.group("last_word")
         tag_name = matchobj.group("tag")
-        content = matchobj.group("content")
+        value = matchobj.group("value")
 
-        replacement_text = '{{:{}="{}"}}'.format(tag_name, content)
+        replacement_text = '{}{{:{}="{}"}}'.format(last_word, tag_name, value)
         if logging == "on":
             display_replacement(original_text, replacement_text)
 
