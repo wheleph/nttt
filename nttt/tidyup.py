@@ -56,7 +56,6 @@ def fix_md_step(src, lang, dst, disable, logging):
     md_content = md_content.replace(" --- hint --- ", "--- hint ---\n")
     md_content = md_content.replace(" --- /hint ---", "\n--- /hint ---\n")
     md_content = md_content.replace(" --- /hints ---", "--- /hints ---")
-    md_content = md_content.replace('{: target = " blank"}', '{:target="blank"}')
     md_content = md_content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:

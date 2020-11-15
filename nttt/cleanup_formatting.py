@@ -3,7 +3,7 @@ from .nttt_logging import log_replacement
 
 
 def trim_formatting_tags(md_file_content, logging):
-    return re.sub(r'(?P<last_word>\S+?)\s*{\s*:\s*(?P<tag>[\w]+?)\s*=\s*"(?P<value>.+?)"\s*}',
+    return re.sub(r'(?P<last_word>\S+?)\s*{\s*:\s*(?P<tag>[\w]+?)\s*=\s*"\s*(?P<value>.+?)\s*"\s*}',
                   replacement_builder(logging),
                   md_file_content)
 
