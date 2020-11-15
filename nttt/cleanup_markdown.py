@@ -1,5 +1,5 @@
 import re
-from .nttt_logging import display_md
+from .nttt_logging import log_replacement
 from .utilities import apply_to_every_other_part
 
 
@@ -35,10 +35,13 @@ def __trim_md_tags_in_line(s, logging):
 
 def replacement_builder(logging):
     def internal_replacement_builder(matchobj):
+        original_text = matchobj.group()
         tag_name = matchobj.group("tag")
         stripped_content = matchobj.group("content").strip()
+
+        replacement_text = "{}{}{}".format(tag_name, stripped_content, tag_name)
         if logging == "on":
-            display_md(tag_name, matchobj.group("content"), stripped_content)
-        return "{}{}{}".format(tag_name, stripped_content, tag_name)
+            log_replacement(original_text, replacement_text)
+        return replacement_text
 
     return internal_replacement_builder
