@@ -37,6 +37,12 @@ class TestCleanupFormatting(unittest.TestCase):
 
         self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
 
+    def test_fix_target_blank(self):
+        init = 'link{: target = "_  blank"}'
+        out = 'link{:target="_blank"}'
+
+        self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
+
 
 if __name__ == '__main__':
     unittest.main()

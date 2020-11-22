@@ -1,6 +1,8 @@
 import re
 from .nttt_logging import log_replacement
 
+pattern_blank = re.compile(r'^_\s+blank$')
+
 
 def trim_formatting_tags(md_file_content, logging):
     return re.sub(r'(?P<last_word>\S+?)\s*{\s*:\s*(?P<tag>[\w]+?)\s*=\s*"\s*(?P<value>.+?)\s*"\s*}',
@@ -14,6 +16,9 @@ def replacement_builder(logging):
         last_word = matchobj.group("last_word")
         tag_name = matchobj.group("tag")
         value = matchobj.group("value")
+
+        if pattern_blank.match(value):
+            value = "_blank"
 
         replacement_text = '{}{{:{}="{}"}}'.format(last_word, tag_name, value)
         if logging == "on":
