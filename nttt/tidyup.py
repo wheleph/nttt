@@ -5,6 +5,7 @@ from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
 from .cleanup_markdown import trim_md_tags
 from .cleanup_html import trim_html_tags
+from .cleanup_formatting import trim_formatting_tags
 
 
 def fix_meta(src, english_src, dst):
@@ -55,7 +56,6 @@ def fix_md_step(src, lang, dst, disable, logging):
     md_content = md_content.replace(" --- hint --- ", "--- hint ---\n")
     md_content = md_content.replace(" --- /hint ---", "\n--- /hint ---\n")
     md_content = md_content.replace(" --- /hints ---", "--- /hints ---")
-    md_content = md_content.replace('{: target = " blank"}', '{:target="blank"}')
     md_content = md_content.replace("\n` ", "\n`")
 
     if "fix_md" not in disable:
@@ -63,6 +63,9 @@ def fix_md_step(src, lang, dst, disable, logging):
 
     if "fix_html" not in disable:
         md_content = trim_html_tags(md_content, logging)
+
+    if "fix_formatting" not in disable:
+        md_content = trim_formatting_tags(md_content, logging)
 
     collapse_error = "--- collapse ---\n\n## title: "
     collapse_title = find_snippet(md_content, collapse_error, "\n")
