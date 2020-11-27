@@ -14,8 +14,8 @@ def replacement_builder(logging):
     def internal_replacement_builder(matchobj):
         original_text = matchobj.group()
         last_word = matchobj.group("last_word")
-        tag_name = matchobj.group("tag")
-        value = matchobj.group("value")
+        tag_name = matchobj.group("tag").lower()
+        value = matchobj.group("value").lower()
 
         if pattern_blank.match(value):
             value = "_blank"
