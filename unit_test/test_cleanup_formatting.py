@@ -49,6 +49,18 @@ class TestCleanupFormatting(unittest.TestCase):
 
         self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
 
+    def test_fix_quotes(self):
+        init = '<0>おばけのスプライトが押されたとき</0>{:class=”blockevents”}'
+        out = '<0>おばけのスプライトが押されたとき</0>{:class="blockevents"}'
+
+        self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
+
+    def test_fix_colon(self):
+        init = '<0>trinket.io</0>{：target = "_ blank"}'
+        out = '<0>trinket.io</0>{:target="_blank"}'
+
+        self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
+
 
 if __name__ == '__main__':
     unittest.main()
