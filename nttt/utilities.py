@@ -58,7 +58,7 @@ def find_files(src, file_names=[], extensions=[]):
             if valid_file:
                 files_found.append(fpath)
 
-    return files_found
+    return sorted(files_found)
 
 
 def find_missing_entries(source_folder, dest_folder):
