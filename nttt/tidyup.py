@@ -6,6 +6,7 @@ from .utilities import add_missing_entries, find_files, find_snippet, get_file, 
 from .cleanup_markdown import trim_md_tags
 from .cleanup_html import trim_html_tags
 from .cleanup_formatting import trim_formatting_tags
+from .cleanup_sections import fix_sections
 
 
 def fix_meta(src, english_src, dst):
@@ -50,13 +51,11 @@ def revert_untranslatable_meta_elements(content, english_content):
 
 def fix_md_step(src, lang, dst, disable, logging):
     md_content, suggested_eol = get_file(src)
-    md_content = md_content.replace("\---", "---")
     md_content = md_content.replace("## ---", "---")
-    md_content = md_content.replace("--- hints ---", "--- hints ---\n")
-    md_content = md_content.replace(" --- hint --- ", "--- hint ---\n")
-    md_content = md_content.replace(" --- /hint ---", "\n--- /hint ---\n")
-    md_content = md_content.replace(" --- /hints ---", "--- /hints ---")
     md_content = md_content.replace("\n` ", "\n`")
+
+    if "fix_sections" not in disable:
+        md_content = fix_sections(md_content, logging)
 
     if "fix_md" not in disable:
         md_content = trim_md_tags(md_content, logging)
