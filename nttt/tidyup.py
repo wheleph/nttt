@@ -4,10 +4,12 @@ import ruamel.yaml
 from .acknowledgements import add_volunteer_acknowledgement
 from .arguments import get_step_file
 from .constants import ArgumentKeyConstants, GeneralConstants
-from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
+from .utilities import add_missing_entries, find_files, get_file, save_file
 from .cleanup_markdown import trim_md_tags
 from .cleanup_html import trim_html_tags
 from .cleanup_formatting import trim_formatting_tags
+from .cleanup_sections import fix_sections
+from .cleanup_sections import fix_sections_translation
 
 
 def fix_meta(src, english_src, dst):
@@ -50,15 +52,18 @@ def revert_untranslatable_meta_elements(content, english_content):
     return string_buffer.read()
 
 
-def fix_md_step(src, lang, dst, disable, logging):
-    md_content, suggested_eol = get_file(src)
-    md_content = md_content.replace("\---", "---")
-    md_content = md_content.replace("## ---", "---")
-    md_content = md_content.replace("--- hints ---", "--- hints ---\n")
-    md_content = md_content.replace(" --- hint --- ", "--- hint ---\n")
-    md_content = md_content.replace(" --- /hint ---", "\n--- /hint ---\n")
-    md_content = md_content.replace(" --- /hints ---", "--- /hints ---")
+def fix_md_step(src, lang, english_src, dst, disable, logging):
+    (md_content, suggested_eol) = get_file(src)
+    en_md_content = None
+    if os.path.isfile(english_src):
+        (en_md_content, _) = get_file(english_src)
+
     md_content = md_content.replace("\n` ", "\n`")
+
+    if "fix_sections" not in disable:
+        md_content = fix_sections(md_content, logging)
+        if en_md_content is not None:
+            md_content = fix_sections_translation(md_content, en_md_content, logging)
 
     if "fix_md" not in disable:
         md_content = trim_md_tags(md_content, logging)
@@ -68,12 +73,6 @@ def fix_md_step(src, lang, dst, disable, logging):
 
     if "fix_formatting" not in disable:
         md_content = trim_formatting_tags(md_content, logging)
-
-    collapse_error = "--- collapse ---\n\n## title: "
-    collapse_title = find_snippet(md_content, collapse_error, "\n")
-    while collapse_title is not None:
-        md_content = md_content.replace(collapse_error + collapse_title + "\n", "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
-        collapse_title = find_snippet(md_content, collapse_error, "\n")
 
     # update language in urls
     md_content = md_content.replace("/en/", "/" + lang + "/")
@@ -104,15 +103,15 @@ def tidyup_translations(arguments):
     if len(files_to_update) > 0:
         print("About to tidy up files:")
         for file in files_to_update:
-            print(" - {}".format(file.replace(str(folder), "")))
+            print(" - {}".format(os.path.basename(file)))
 
         process_yn = input("Continue (y/n):")
         if process_yn.casefold() == "y":
 
             for source_file_path in files_to_update:
-                file_name = source_file_path.replace(str(folder), "")
+                file_name = os.path.basename(source_file_path)
 
-                output_file_path = str(output_folder) + file_name
+                output_file_path = os.path.join(output_folder, file_name)
 
                 # create output folder
                 output_file_folder = os.path.dirname(output_file_path)
@@ -121,10 +120,11 @@ def tidyup_translations(arguments):
                     os.makedirs(output_file_folder)
 
                 print("Fixing - {}".format(file_name))
-                if os.path.basename(source_file_path) == GeneralConstants.FILE_NAME_META_YML:
-                    fix_meta(source_file_path, os.path.join(english_folder, GeneralConstants.FILE_NAME_META_YML), output_file_path)
+                en_file_path = os.path.join(english_folder, file_name)
+                if file_name == GeneralConstants.FILE_NAME_META_YML:
+                    fix_meta(source_file_path, en_file_path, output_file_path)
                 else:
-                    fix_md_step(source_file_path, language, output_file_path, disable, logging)
+                    fix_md_step(source_file_path, language, en_file_path, output_file_path, disable, logging)
 
             if final_step > 0:
                 output_file_path = get_step_file(output_folder, final_step)

@@ -21,8 +21,7 @@ def replacement_builder(logging):
             value = "_blank"
 
         replacement_text = '{}{{:{}="{}"}}'.format(last_word, tag_name, value)
-        if logging == "on":
-            log_replacement(original_text, replacement_text)
+        log_replacement(original_text, replacement_text, logging)
         return replacement_text
 
     return internal_replacement_builder

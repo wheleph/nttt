@@ -53,18 +53,22 @@ class AssertHelper:
             unittest.TestCase().assertEqual(result, expected_output_file_content)
 
     @staticmethod
-    def assert_fix_step(input_file_content, second_argument, expected_output_file_content):
+    def assert_fix_step(input_file_content, lang, en_file_content, expected_output_file_content):
         """
         - Prepare input file
         - Run nttt.tidyup.fix_step
         - Assert that the output file has the expected content
         """
         with CustomNamedTemporaryFile(mode="wb", delete=True) as temp_src, \
+                CustomNamedTemporaryFile(mode="wb", delete=True) as temp_en_src, \
                 CustomNamedTemporaryFile(mode="rb", delete=True) as temp_dest:
             temp_src.write(input_file_content.encode('utf-8'))
             temp_src.flush()
 
-            nttt.tidyup.fix_md_step(temp_src.name, second_argument, temp_dest.name, (), "off")
+            temp_en_src.write(en_file_content.encode('utf-8'))
+            temp_en_src.flush()
+
+            nttt.tidyup.fix_md_step(temp_src.name, lang, temp_en_src.name, temp_dest.name, (), "off")
 
             result = temp_dest.read().decode('utf-8')
             unittest.TestCase().assertEqual(result, expected_output_file_content)
