@@ -35,7 +35,7 @@ class TestEol(unittest.TestCase):
             "  - title: Inleiding\n")
 
     def test_fix_collapse_block_crlf(self):
-        AssertHelper.assert_fix_step("--- collapse ---\r\n"
+        AssertHelper.assert_fix_step("## \\--- collapse \\---\r\n"
                                      "\r\n"
                                      "## title: My title\r\n",
 
@@ -47,7 +47,7 @@ class TestEol(unittest.TestCase):
                                      "---\r\n")
 
     def test_fix_collapse_block_lf(self):
-        AssertHelper.assert_fix_step("--- collapse ---\n"
+        AssertHelper.assert_fix_step("## \--- collapse \---\n"
                                      "\n"
                                      "## title: My title\n",
 
