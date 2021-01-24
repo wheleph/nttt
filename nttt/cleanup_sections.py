@@ -1,6 +1,8 @@
 from .utilities import find_snippet
+from .nttt_logging import log_replacement
 
 
+# TODO think about logging of these replacements
 def fix_sections(md_file_content, logging):
     # For some weird reason Crowdin replaces '---' to '\---' in its output. So let's revert it back
     md_file_content = md_file_content.replace("\\---", "---")
@@ -16,8 +18,11 @@ def fix_sections(md_file_content, logging):
     collapse_error = "## --- collapse ---\n\n## title: "
     collapse_title = find_snippet(md_file_content, collapse_error, "\n")
     while collapse_title is not None:
-        md_file_content = md_file_content.replace(collapse_error + collapse_title + "\n",
-                                                  "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
+        original_text = collapse_error + collapse_title + "\n"
+        replacement_text = "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n"
+        md_file_content = md_file_content.replace(original_text, replacement_text)
+        log_replacement(original_text, replacement_text, logging)
+
         collapse_title = find_snippet(md_file_content, collapse_error, "\n")
 
     return md_file_content

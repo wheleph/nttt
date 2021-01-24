@@ -22,8 +22,7 @@ def replacement_builder(logging):
         stripped_content = matchobj.group("content").strip()
 
         replacement_text = "<{}>{}</{}>".format(tag_name, stripped_content, tag_name)
-        if logging == "on":
-            log_replacement(original_text, replacement_text)
+        log_replacement(original_text, replacement_text, logging)
         return replacement_text
 
     return internal_replacement_builder
