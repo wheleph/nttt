@@ -11,7 +11,6 @@ class TestCleanupSections(unittest.TestCase):
 Wat gebeurt er als de boot de muisaanwijzer bereikt? Probeer het uit om te zien wat het probleem is.
 
 \\--- /task \\---'''
-        print(c_initial)
         c_target = '''--- task ---
 
 Wat gebeurt er als de boot de muisaanwijzer bereikt? Probeer het uit om te zien wat het probleem is.
@@ -50,6 +49,22 @@ Dit is hoe je code eruit zou moeten zien:
 
 --- /hint ---
 --- /hints ---'''
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
+    def test_fix_title(self):
+        c_initial = '''## \\--- collapse \\---
+
+## title: Нотатки керівника клубу
+
+## Вступ:
+'''
+        c_target = '''--- collapse ---
+---
+title: Нотатки керівника клубу
+---
+
+## Вступ:
+'''
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
 

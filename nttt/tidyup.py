@@ -2,7 +2,7 @@ import os
 import io
 import ruamel.yaml
 from .constants import ArgumentKeyConstants, GeneralConstants
-from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
+from .utilities import add_missing_entries, find_files, get_file, save_file
 from .cleanup_markdown import trim_md_tags
 from .cleanup_html import trim_html_tags
 from .cleanup_formatting import trim_formatting_tags
@@ -51,7 +51,6 @@ def revert_untranslatable_meta_elements(content, english_content):
 
 def fix_md_step(src, lang, dst, disable, logging):
     md_content, suggested_eol = get_file(src)
-    md_content = md_content.replace("## ---", "---")
     md_content = md_content.replace("\n` ", "\n`")
 
     if "fix_sections" not in disable:
@@ -65,12 +64,6 @@ def fix_md_step(src, lang, dst, disable, logging):
 
     if "fix_formatting" not in disable:
         md_content = trim_formatting_tags(md_content, logging)
-
-    collapse_error = "--- collapse ---\n\n## title: "
-    collapse_title = find_snippet(md_content, collapse_error, "\n")
-    while collapse_title is not None:
-        md_content = md_content.replace(collapse_error + collapse_title + "\n", "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n")
-        collapse_title = find_snippet(md_content, collapse_error, "\n")
 
     # update language in urls
     md_content = md_content.replace("/en/", "/" + lang + "/")
