@@ -1,5 +1,6 @@
 class GeneralConstants:
     FILE_NAME_META_YML = "meta.yml"
+    GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKB5UbOBdmo2lgsvqQa-JB5lTgjKSvDEP7S4IzWDLcTH1cR_yWqF9CAF-Q0IwZOnuet2kfo3T5ato3/pub?gid=0&single=true&output=csv"
 
 
 class ArgumentKeyConstants:

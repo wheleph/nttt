@@ -1,2 +1,3 @@
 eol==0.7.5
+pandas=1.2.0
 ruamel.yaml==0.16.12
