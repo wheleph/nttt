@@ -125,7 +125,7 @@ class TestAcknowledgements(unittest.TestCase):
             output_file_path.touch()
             language = "nl-NL"
             volunteers = ["Volunteer One", "Vrijwilliger Twee",
-                          "Freiwillige Drei", "Bénévole Quatre"]
+                          "Freiwillige Drei", "Voluntario Cuatro"]
             logging = "off"
             result = nttt.acknowledgements.add_volunteer_acknowledgement(
                 csv_file_path, output_file_path, language, volunteers, logging)
@@ -145,7 +145,7 @@ class TestAcknowledgements(unittest.TestCase):
             self.assertEqual("", lines[7])
             self.assertEqual("Freiwillige Drei", lines[8])
             self.assertEqual("", lines[9])
-            self.assertEqual("Bénévole Quatre", lines[10])
+            self.assertEqual("Voluntario Cuatro", lines[10])
             self.assertEqual("", lines[11])
             self.assertEqual(self.LAST_LINE, lines[12])
 
