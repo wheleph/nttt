@@ -130,8 +130,11 @@ def tidyup_translations(arguments):
 
             if final_step > 0:
                 output_file_path = get_step_file(output_folder, final_step)
-                print("Adding volunteer acknowledgement - {}".format(output_file_path))
-                add_volunteer_acknowledgement(GeneralConstants.GOOGLE_SHEET_URL, output_file_path, language, volunteers, logging)
+                print("Adding volunteer acknowledgement - {}".format(
+                        output_file_path))
+                add_volunteer_acknowledgement(
+                    GeneralConstants.VOLUNTEER_ACKNOWLEDGEMENTS_CSV,
+                    output_file_path, language, volunteers, logging)
 
     else:
         print("No files found in '{}'".format(folder))
