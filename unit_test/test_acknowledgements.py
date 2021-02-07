@@ -33,14 +33,45 @@ class TestAcknowledgements(unittest.TestCase):
         in the CSV file.
         '''
 
-        data_folder = Path(os.getcwd(), "unit_test", "data")
-        self.assertTrue(data_folder.is_dir(),
-                        "Subdirectory data of directory unit_test is missing.")
-        csv_file_path = Path(data_folder, "volunteer_acknowledgements.csv")
-        language = "nl-BE"
-        result = nttt.acknowledgements.get_volunteer_acknowledgement(
-            csv_file_path, language)
-        self.assertIsNone(result)
+        with TemporaryDirectory() as temp_folder:
+            data_folder = Path(os.getcwd(), "unit_test", "data")
+            self.assertTrue(
+                data_folder.is_dir(),
+                "Subdirectory data of directory unit_test is missing.")
+            csv_file_path = Path(data_folder, "volunteer_acknowledgements.csv")
+            language = "nl-BE"
+            result = nttt.acknowledgements.get_volunteer_acknowledgement(
+                csv_file_path, language)
+            self.assertIsNone(result)
+
+            output_file_path = Path(temp_folder, "final_step.md")
+            output_file_path.touch()
+            volunteers = []
+            logging = "off"
+            result = nttt.acknowledgements.add_volunteer_acknowledgement(
+                csv_file_path, output_file_path, language, volunteers, logging)
+            self.assertFalse(result)
+
+    def test_missing_acknowledgement(self):
+        '''
+        Test case for the situation where the acknowledgement for the requested
+        language in the CSV file is empty.
+        '''
+
+        with TemporaryDirectory() as temp_folder:
+            data_folder = Path(os.getcwd(), "unit_test", "data")
+            self.assertTrue(
+                data_folder.is_dir(),
+                "Subdirectory data of directory unit_test is missing.")
+            csv_file_path = Path(data_folder, "volunteer_acknowledgements.csv")
+            output_file_path = Path(temp_folder, "final_step.md")
+            output_file_path.touch()
+            language = "et-EE"
+            volunteers = []
+            logging = "off"
+            result = nttt.acknowledgements.add_volunteer_acknowledgement(
+                csv_file_path, output_file_path, language, volunteers, logging)
+            self.assertFalse(result)
 
     def test_no_volunteer_names(self):
         '''
@@ -60,7 +91,7 @@ class TestAcknowledgements(unittest.TestCase):
             logging = "off"
             result = nttt.acknowledgements.add_volunteer_acknowledgement(
                 csv_file_path, output_file_path, language, volunteers, logging)
-            self.assertIsNotNone(result)
+            self.assertTrue(result)
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
@@ -96,7 +127,7 @@ class TestAcknowledgements(unittest.TestCase):
             logging = "off"
             result = nttt.acknowledgements.add_volunteer_acknowledgement(
                 csv_file_path, output_file_path, language, volunteers, logging)
-            self.assertIsNotNone(result)
+            self.assertTrue(result)
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
@@ -129,7 +160,7 @@ class TestAcknowledgements(unittest.TestCase):
             logging = "off"
             result = nttt.acknowledgements.add_volunteer_acknowledgement(
                 csv_file_path, output_file_path, language, volunteers, logging)
-            self.assertIsNotNone(result)
+            self.assertTrue(result)
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()

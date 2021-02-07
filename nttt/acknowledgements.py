@@ -1,4 +1,6 @@
+import math
 import pandas
+import sys
 from .utilities import get_file, save_file
 
 
@@ -12,7 +14,8 @@ def get_volunteer_acknowledgement(csv_file_path, language):
     try:
         data_frame = pandas.read_csv(csv_file_path)
     except:
-        print("ERROR: Could not read the volunteer acknowledgements spreadsheet.")
+        print("Could not read the volunteer acknowledgements spreadsheet.",
+              file=sys.stderr)
         return None
 
     acknowledgement = None
@@ -32,11 +35,16 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
 
     acknowledgement = get_volunteer_acknowledgement(csv_file_path, language)
     if acknowledgement is None:
-        print("ERROR: Could not find the volunteer acknowledgement for language {}".format(language))
+        print("Could not find the volunteer acknowledgement for language {}".format(language),
+              file=sys.stderr)
+        return False
+    elif str(acknowledgement) == "nan":
+        print("Empty volunteer acknowledgement for language {}".format(language),
+              file=sys.stderr)
         return False
 
     if len(volunteers) == 0:
-        print("WARNING: No volunteer name(s) given - please add them manually")
+        print("Warning: No volunteer name(s) given - please add them manually")
     else:
         volunteer_names = ""
         first = True
