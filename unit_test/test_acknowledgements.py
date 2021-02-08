@@ -73,6 +73,28 @@ class TestAcknowledgements(unittest.TestCase):
                 csv_file_path, output_file_path, language, volunteers, logging)
             self.assertFalse(result)
 
+    def test_incorrect_acknowledgement(self):
+        '''
+        Test case for the situation where the acknowledgement for the requested
+        language in the CSV file is incorrect, i.e. doesn't have three name
+        placeholders with empty lines in between.
+        '''
+
+        with TemporaryDirectory() as temp_folder:
+            data_folder = Path(os.getcwd(), "unit_test", "data")
+            self.assertTrue(
+                data_folder.is_dir(),
+                "Subdirectory data of directory unit_test is missing.")
+            csv_file_path = Path(data_folder, "volunteer_acknowledgements.csv")
+            output_file_path = Path(temp_folder, "final_step.md")
+            output_file_path.touch()
+            language = "fil-PH"
+            volunteers = []
+            logging = "off"
+            result = nttt.acknowledgements.add_volunteer_acknowledgement(
+                csv_file_path, output_file_path, language, volunteers, logging)
+            self.assertFalse(result)
+
     def test_no_volunteer_names(self):
         '''
         Test case for the situation where the list of volunteer names is empty.

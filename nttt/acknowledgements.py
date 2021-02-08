@@ -43,6 +43,12 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
               file=sys.stderr)
         return False
 
+    name_placeholders = "[name]\n\n[name]\n\n[name]\n"
+    if name_placeholders not in acknowledgement:
+        print("Incorrect volunteer acknowledgement for language {}".format(language),
+              file=sys.stderr)
+        return False
+
     if len(volunteers) == 0:
         print("Warning: No volunteer name(s) given - please add them manually")
     else:
@@ -54,7 +60,7 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
                 volunteer_names = volunteer + "\n"
             else:
                 volunteer_names = volunteer_names + "\n" + volunteer + "\n"
-        acknowledgement = acknowledgement.replace("[name]\n\n[name]\n\n[name]\n", volunteer_names)
+        acknowledgement = acknowledgement.replace(name_placeholders, volunteer_names)
     if logging == "on":
         print("Volunteer acknowledgement to be added:")
         print(acknowledgement)
