@@ -2,8 +2,8 @@ class GeneralConstants:
     FILE_NAME_META_YML = "meta.yml"
     VOLUNTEER_ACKNOWLEDGEMENTS_CSV = (
         "https://docs.google.com/spreadsheets/d/e/"
-        "2PACX-1vRKB5UbOBdmo2lgsvqQa-JB5lTgjKSvDEP7S4IzWDLcTH1cR_yWqF9CAF-Q0IwZOnuet2kfo3T5ato3/"
-        "pub?gid=0&single=true&output=csv")
+        "2PACX-1vS_oJDVBL9f0YQxISmtcCp8V1Hf4zjw1BwIhm-w5GMsvA8Y4VdT9JAUSueRXI5me5usLjblEPsNlqIH/"
+        "pub?gid=1717165158&single=true&output=csv")
 
 
 class ArgumentKeyConstants:
