@@ -126,8 +126,6 @@ def tidyup_translations(arguments):
                 else:
                     fix_md_step(source_file_path, language, output_file_path, disable, logging)
 
-            print("Complete")
-
             if final_step > 0:
                 output_file_path = get_step_file(output_folder, final_step)
                 print("Adding volunteer acknowledgement - {}".format(
@@ -135,6 +133,8 @@ def tidyup_translations(arguments):
                 add_volunteer_acknowledgement(
                     GeneralConstants.VOLUNTEER_ACKNOWLEDGEMENTS_CSV,
                     output_file_path, language, volunteers, logging)
+
+            print("Complete")
 
     else:
         print("No files found in '{}'".format(folder))

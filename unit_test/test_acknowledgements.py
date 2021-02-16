@@ -117,19 +117,19 @@ class TestAcknowledgements(unittest.TestCase):
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
-            lines = contents.splitlines()
-            self.assertEqual(11, len(lines))
-            self.assertEqual("", lines[0])
-            self.assertEqual("***", lines[1])
-            self.assertEqual(self.FIRST_LINE, lines[2])
-            self.assertEqual("", lines[3])
-            self.assertEqual("[name]", lines[4])
-            self.assertEqual("", lines[5])
-            self.assertEqual("[name]", lines[6])
-            self.assertEqual("", lines[7])
-            self.assertEqual("[name]", lines[8])
-            self.assertEqual("", lines[9])
-            self.assertEqual(self.LAST_LINE, lines[10])
+            expected_contents = '\n'.join(["",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "[name]",
+                                           "",
+                                           "[name]",
+                                           "",
+                                           "[name]",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
 
     def test_one_volunteer_name(self):
         '''
@@ -153,15 +153,15 @@ class TestAcknowledgements(unittest.TestCase):
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
-            lines = contents.splitlines()
-            self.assertEqual(7, len(lines))
-            self.assertEqual("", lines[0])
-            self.assertEqual("***", lines[1])
-            self.assertEqual(self.FIRST_LINE, lines[2])
-            self.assertEqual("", lines[3])
-            self.assertEqual("Volunteer One", lines[4])
-            self.assertEqual("", lines[5])
-            self.assertEqual(self.LAST_LINE, lines[6])
+            expected_contents = '\n'.join(["",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "Volunteer One",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
 
     def test_four_volunteer_names(self):
         '''
@@ -186,21 +186,21 @@ class TestAcknowledgements(unittest.TestCase):
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
-            lines = contents.splitlines()
-            self.assertEqual(13, len(lines))
-            self.assertEqual("", lines[0])
-            self.assertEqual("***", lines[1])
-            self.assertEqual(self.FIRST_LINE, lines[2])
-            self.assertEqual("", lines[3])
-            self.assertEqual("Volunteer One", lines[4])
-            self.assertEqual("", lines[5])
-            self.assertEqual("Vrijwilliger Twee", lines[6])
-            self.assertEqual("", lines[7])
-            self.assertEqual("Freiwillige Drei", lines[8])
-            self.assertEqual("", lines[9])
-            self.assertEqual("Voluntario Cuatro", lines[10])
-            self.assertEqual("", lines[11])
-            self.assertEqual(self.LAST_LINE, lines[12])
+            expected_contents = '\n'.join(["",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "Volunteer One",
+                                           "",
+                                           "Vrijwilliger Twee",
+                                           "",
+                                           "Freiwillige Drei",
+                                           "",
+                                           "Voluntario Cuatro",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
 
     def test_contents_preserved(self):
         '''
@@ -225,17 +225,17 @@ class TestAcknowledgements(unittest.TestCase):
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
-            lines = contents.splitlines()
-            self.assertEqual(9, len(lines))
-            self.assertEqual("Line One.", lines[0])
-            self.assertEqual("Line 2,", lines[1])
-            self.assertEqual("line three.", lines[2])
-            self.assertEqual("***", lines[3])
-            self.assertEqual(self.FIRST_LINE, lines[4])
-            self.assertEqual("", lines[5])
-            self.assertEqual("Volunteer One", lines[6])
-            self.assertEqual("", lines[7])
-            self.assertEqual(self.LAST_LINE, lines[8])
+            expected_contents = '\n'.join(["Line One.",
+                                           "Line 2,",
+                                           "line three.",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "Volunteer One",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
 
     def test_trailing_blanks_removed(self):
         '''
@@ -260,15 +260,15 @@ class TestAcknowledgements(unittest.TestCase):
 
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
-            lines = contents.splitlines()
-            self.assertEqual(7, len(lines))
-            self.assertEqual("This is the end.", lines[0])
-            self.assertEqual("***", lines[1])
-            self.assertEqual(self.FIRST_LINE, lines[2])
-            self.assertEqual("", lines[3])
-            self.assertEqual("Volunteer One", lines[4])
-            self.assertEqual("", lines[5])
-            self.assertEqual(self.LAST_LINE, lines[6])
+            expected_contents = '\n'.join(["This is the end.",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "Volunteer One",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
 
 
 if __name__ == "__main__":

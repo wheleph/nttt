@@ -1,7 +1,11 @@
-import math
 import pandas
 import sys
 from .utilities import get_file, save_file
+
+
+# In case of an empty spreadsheet cell, pandas will return a float value NaN.
+# In string format, this becomes 'nan'.
+EMPTY_CELL_AS_STRING = 'nan'
 
 
 def get_volunteer_acknowledgement(csv_file_path, language):
@@ -18,12 +22,10 @@ def get_volunteer_acknowledgement(csv_file_path, language):
               file=sys.stderr)
         return None
 
-    acknowledgement = None
     for i in data_frame.index:
         if data_frame.at[i, 'Locale'] == language:
-            acknowledgement = data_frame.at[i, 'Acknowledgement']
-            break
-    return acknowledgement
+            return data_frame.at[i, 'Acknowledgement']
+    return None
 
 
 def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
@@ -38,7 +40,7 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
         print("Could not find the volunteer acknowledgement for language {}".format(language),
               file=sys.stderr)
         return False
-    elif str(acknowledgement) == "nan":
+    elif str(acknowledgement) == EMPTY_CELL_AS_STRING:
         print("Empty volunteer acknowledgement for language {}".format(language),
               file=sys.stderr)
         return False
@@ -52,15 +54,9 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
     if len(volunteers) == 0:
         print("Warning: No volunteer name(s) given - please add them manually")
     else:
-        volunteer_names = ""
-        first = True
-        for volunteer in volunteers:
-            if first:
-                first = False
-                volunteer_names = volunteer + "\n"
-            else:
-                volunteer_names = volunteer_names + "\n" + volunteer + "\n"
-        acknowledgement = acknowledgement.replace(name_placeholders, volunteer_names)
+        volunteer_names = '\n\n'.join(volunteers) + '\n'
+        acknowledgement = acknowledgement.replace(name_placeholders,
+                                                  volunteer_names)
     if logging == "on":
         print("Volunteer acknowledgement to be added:")
         print(acknowledgement)
