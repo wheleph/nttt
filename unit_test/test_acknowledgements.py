@@ -270,6 +270,49 @@ class TestAcknowledgements(unittest.TestCase):
                                            ""])
             self.assertEqual(contents, expected_contents)
 
+    def test_existing_acknowledgement(self):
+        '''
+        Test case for the situation where the acknowledgement already exists
+        in the final step file.
+        '''
+
+        with TemporaryDirectory() as temp_folder:
+            data_folder = Path(os.getcwd(), "unit_test", "data")
+            self.assertTrue(
+                data_folder.is_dir(),
+                "Subdirectory data of directory unit_test is missing.")
+            csv_file_path = Path(data_folder, "volunteer_acknowledgements.csv")
+            output_file_path = Path(temp_folder, "final_step.md")
+            output_file_path.touch()
+            language = "nl-NL"
+            volunteers = ["Volunteer One"]
+            logging = "off"
+            result = nttt.acknowledgements.add_volunteer_acknowledgement(
+                csv_file_path, output_file_path, language, volunteers, logging)
+            self.assertTrue(result)
+
+            # Check contents of final_step.md.
+            contents = output_file_path.read_text()
+            expected_contents = '\n'.join(["",
+                                           "***",
+                                           self.FIRST_LINE,
+                                           "",
+                                           "Volunteer One",
+                                           "",
+                                           self.LAST_LINE,
+                                           ""])
+            self.assertEqual(contents, expected_contents)
+
+            # Run again (using other volunteer names).
+            volunteers = ["Vrijwilliger Twee", "Freiwillige Drei"]
+            result = nttt.acknowledgements.add_volunteer_acknowledgement(
+                csv_file_path, output_file_path, language, volunteers, logging)
+            self.assertFalse(result)
+
+            # Check contents of final_step.md - should not be changed.
+            contents = output_file_path.read_text()
+            self.assertEqual(contents, expected_contents)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -51,6 +51,12 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
               file=sys.stderr)
         return False
 
+    content, suggested_eol = get_file(output_file_path)
+    if "***\n" in content:
+        print("Volunteer acknowledgement already present in file {}".format(output_file_path),
+              file=sys.stderr)
+        return False
+
     if len(volunteers) == 0:
         print("Warning: No volunteer name(s) given - please add them manually")
     else:
@@ -61,7 +67,6 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
         print("Volunteer acknowledgement to be added:")
         print(acknowledgement)
 
-    content, suggested_eol = get_file(output_file_path)
     # Strip trailings blanks (spaces, tabs, newlines) from the original content
     # before appending the volunteer acknowledgement. This avoids a surplus of
     # empty lines between the content and the volunteer acknowledgement.
