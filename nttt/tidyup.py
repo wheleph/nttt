@@ -1,6 +1,8 @@
 import os
 import io
 import ruamel.yaml
+from .acknowledgements import add_volunteer_acknowledgement
+from .arguments import get_step_file
 from .constants import ArgumentKeyConstants, GeneralConstants
 from .utilities import add_missing_entries, find_files, find_snippet, get_file, save_file
 from .cleanup_markdown import trim_md_tags
@@ -92,8 +94,8 @@ def tidyup_translations(arguments):
     language = arguments[ArgumentKeyConstants.LANGUAGE]
     disable = arguments[ArgumentKeyConstants.DISABLE]
     logging = arguments[ArgumentKeyConstants.LOGGING]
-    # volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
-    # final_step = arguments[ArgumentKeyConstants.FINAL]
+    volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
+    final_step = arguments[ArgumentKeyConstants.FINAL]
 
     # get files to update
     print("Find files ...")
@@ -123,6 +125,14 @@ def tidyup_translations(arguments):
                     fix_meta(source_file_path, os.path.join(english_folder, GeneralConstants.FILE_NAME_META_YML), output_file_path)
                 else:
                     fix_md_step(source_file_path, language, output_file_path, disable, logging)
+
+            if final_step > 0:
+                output_file_path = get_step_file(output_folder, final_step)
+                print("Adding volunteer acknowledgement - {}".format(
+                        output_file_path))
+                add_volunteer_acknowledgement(
+                    GeneralConstants.VOLUNTEER_ACKNOWLEDGEMENTS_CSV,
+                    output_file_path, language, volunteers, logging)
 
             print("Complete")
 
