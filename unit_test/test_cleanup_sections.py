@@ -111,6 +111,22 @@ class TestCleanupSections(unittest.TestCase):
                     '## Вступ:\n')
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
+    def test_fix_title_translated(self):
+        c_initial = ('## \\--- collapse \\---\n'
+                     '\n'
+                     '## Назва: Нотатки керівника клубу\n'
+                     '\n'
+                     '## Вступ:\n')
+
+        c_target = ('--- collapse ---\n'
+                    '---\n'
+                    'title: Нотатки керівника клубу\n'
+                    '---\n'
+                    '\n'
+                    '## Вступ:\n')
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
+
     def test_fix_translation_mismatch(self):
         c_initial = ('--- wenken ---\n'
                      '--- wenk ---\n'

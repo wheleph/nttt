@@ -1,6 +1,5 @@
 import re
 import sys
-from .utilities import find_snippet
 from .nttt_logging import log_replacement
 from .constants import RegexConstants
 
@@ -28,15 +27,10 @@ def fix_sections(md_file_content, logging):
                              md_file_content)
 
     # For some weird reason Crowdin breaks 'title' tags. So let's revert it back
-    collapse_error = "## --- collapse ---\n\n## title: "
-    collapse_title = find_snippet(md_file_content, collapse_error, "\n")
-    while collapse_title is not None:
-        original_text = collapse_error + collapse_title + "\n"
-        replacement_text = "--- collapse ---\n---\ntitle: " + collapse_title + "\n---\n"
-        md_file_content = md_file_content.replace(original_text, replacement_text)
-        log_replacement(original_text, replacement_text, logging)
-
-        collapse_title = find_snippet(md_file_content, collapse_error, "\n")
+    c = f"[{RegexConstants.COLONS}]"
+    md_file_content = re.sub(rf'## --- collapse ---\n\n## (?P<tag>.+?){c}{s}*(?P<title>.+?)\n',
+                             replacement_builder_title(logging, "--- collapse ---\n---\ntitle: {}\n---\n"),
+                             md_file_content)
 
     return md_file_content
 
@@ -45,6 +39,18 @@ def replacement_builder(logging, replacement_pattern):
     def internal_replacement_builder(matchobj):
         original_text = matchobj.group()
         tag_name = matchobj.group("tag")
+
+        replacement_text = replacement_pattern.format(tag_name)
+        log_replacement(original_text, replacement_text, logging)
+        return replacement_text
+
+    return internal_replacement_builder
+
+
+def replacement_builder_title(logging, replacement_pattern):
+    def internal_replacement_builder(matchobj):
+        original_text = matchobj.group()
+        tag_name = matchobj.group("title")
 
         replacement_text = replacement_pattern.format(tag_name)
         log_replacement(original_text, replacement_text, logging)
