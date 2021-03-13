@@ -2,16 +2,19 @@ import re
 import sys
 from .utilities import find_snippet
 from .nttt_logging import log_replacement
+from .constants import RegexConstants
 
 
 def fix_sections(md_file_content, logging):
     # For some weird reason Crowdin replaces '---' to '\---' in its output. So let's revert it back
     md_file_content = md_file_content.replace("\\---", "---")
 
+    s = f"[{RegexConstants.SPACES}]"
+
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
     # - users could mistakenly remove spaces around the tag
-    md_file_content = re.sub(r'---?[ \t]*(?P<tag>.+?)[ \t]*---?',
+    md_file_content = re.sub(rf'---?{s}*(?P<tag>.+?){s}*---?',
                              replacement_builder(logging, "--- {} ---"),
                              md_file_content)
 
@@ -20,7 +23,7 @@ def fix_sections(md_file_content, logging):
     # Probably because they go in adjacent lines (no empty line between them).
     # So let's revert it back (also considering situations when translators mistakenly
     # modified those strings, for example translated them in target language
-    md_file_content = re.sub(r'--- (?P<tag>.+?) ---[ \t]+(?=--- .+? ---)',
+    md_file_content = re.sub(rf'--- (?P<tag>.+?) ---{s}+(?=--- .+? ---)',
                              replacement_builder(logging, "--- {} ---\n"),
                              md_file_content)
 
