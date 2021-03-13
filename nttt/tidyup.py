@@ -58,8 +58,6 @@ def fix_md_step(src, lang, english_src, dst, disable, logging):
     if os.path.isfile(english_src):
         (en_md_content, _) = get_file(english_src)
 
-    md_content = md_content.replace("\n` ", "\n`")
-
     if "fix_sections" not in disable:
         md_content = fix_sections(md_content, logging)
         if en_md_content is not None and "revert_section_translation" not in disable:
@@ -78,12 +76,6 @@ def fix_md_step(src, lang, english_src, dst, disable, logging):
     md_content = md_content.replace("/en/", "/" + lang + "/")
 
     save_file(dst, md_content, suggested_eol)
-
-    # doesnt work...  needs thinking about!
-    # bold_text = find_snippet(dst, "** ", " **")
-    # while bold_text is not None:
-    #     find_replace(dst, dst, "** " + bold_text + " **", "**" + bold_text + "**")
-    #     bold_text = find_snippet(dst, "** ", " **")
 
 
 def tidyup_translations(arguments):
