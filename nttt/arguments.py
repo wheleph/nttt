@@ -50,7 +50,7 @@ def parse_command_line(version):
     parser.add_argument("-l", "--language",   help="The language of the content to be tidied up, defaults to basename(INPUT).")
     parser.add_argument("-v", "--volunteers", help="The list of volunteers as a comma separated list, defaults to an empty list.")
     parser.add_argument("-f", "--final",      help="The number of the final step file, defaults to the step file with the highest number.")
-    parser.add_argument("-D", "--Disable",    help="The risky features to be disabled, separated by comma. Options are fix_md,fix_html. Defaults to all risky features to be enabled.")
+    parser.add_argument("-D", "--Disable",    help="The risky features to be disabled, separated by comma. Options are fix_md,fix_html,fix_sections,revert_section_translation,fix_formatting. Defaults to all risky features to be enabled.")
     parser.add_argument("-L", "--Logging",    help="Logging of modifications. Options are on and off. Default is off.")
     return parser.parse_args()
 

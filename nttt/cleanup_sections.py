@@ -50,7 +50,7 @@ def replacement_builder(logging, replacement_pattern):
     return internal_replacement_builder
 
 
-def fix_sections_translation(md_file_name, md_file_content, en_file_content, logging):
+def revert_section_translation(md_file_name, md_file_content, en_file_content, logging):
     """
     Compares translated file to the original one
     and reverts translated section tags ("--- opdracht ---" -> "--- task ---").

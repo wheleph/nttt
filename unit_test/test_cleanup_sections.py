@@ -159,7 +159,7 @@ class TestCleanupSections(unittest.TestCase):
                     '--- /hint ---\n'
                     '--- /hints ---')
 
-        self.assertEqual(cleanup_sections.fix_sections_translation("step_1.md", c_initial, c_original, self.logging), c_target)
+        self.assertEqual(cleanup_sections.revert_section_translation("step_1.md", c_initial, c_original, self.logging), c_target)
 
     def test_fix_translation_match(self):
         c_initial = ('--- wenken ---\n'
@@ -216,7 +216,7 @@ class TestCleanupSections(unittest.TestCase):
                     '--- /hint ---\n'
                     '--- /hints ---')
 
-        self.assertEqual(cleanup_sections.fix_sections_translation("step_1.md", c_initial, c_original, self.logging), c_target)
+        self.assertEqual(cleanup_sections.revert_section_translation("step_1.md", c_initial, c_original, self.logging), c_target)
 
 
 if __name__ == '__main__':

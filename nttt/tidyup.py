@@ -9,7 +9,7 @@ from .cleanup_markdown import trim_md_tags
 from .cleanup_html import trim_html_tags
 from .cleanup_formatting import trim_formatting_tags
 from .cleanup_sections import fix_sections
-from .cleanup_sections import fix_sections_translation
+from .cleanup_sections import revert_section_translation
 
 
 def fix_meta(src, english_src, dst):
@@ -62,8 +62,8 @@ def fix_md_step(src, lang, english_src, dst, disable, logging):
 
     if "fix_sections" not in disable:
         md_content = fix_sections(md_content, logging)
-        if en_md_content is not None:
-            md_content = fix_sections_translation(src, md_content, en_md_content, logging)
+        if en_md_content is not None and "revert_section_translation" not in disable:
+            md_content = revert_section_translation(src, md_content, en_md_content, logging)
 
     if "fix_md" not in disable:
         md_content = trim_md_tags(md_content, logging)
