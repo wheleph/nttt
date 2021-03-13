@@ -51,6 +51,11 @@ def replacement_builder(logging, replacement_pattern):
 
 
 def fix_sections_translation(md_file_name, md_file_content, en_file_content, logging):
+    """
+    Compares translated file to the original one
+    and reverts translated section tags ("--- opdracht ---" -> "--- task ---").
+    This happens if both orignal file and the translated one contain the same number of those tags
+    """
     section_pattern = re.compile("--- (?P<tag>.+?) ---")
 
     md_file_lines = md_file_content.split('\n')
