@@ -1,11 +1,15 @@
 import re
 from .nttt_logging import log_replacement
+from .constants import RegexConstants
 
-pattern_blank = re.compile(r'^_\s+blank$')
+pattern_blank = re.compile(rf'^_[{RegexConstants.SPACES}]+blank$')
 
 
 def trim_formatting_tags(md_file_content, logging):
-    return re.sub(r'(?P<last_word>\S+?)\s*{\s*[:：]\s*(?P<tag>[\w]+?)\s*=\s*["”“]\s*(?P<value>.+?)\s*["”“]\s*}',
+    s = f"[{RegexConstants.SPACES}]"
+    c = f"[{RegexConstants.COLONS}]"
+    q = f"[{RegexConstants.QUOTES}]"
+    return re.sub(rf'(?P<last_word>\S+?){s}*{{{s}*{c}{s}*(?P<tag>[\w]+?){s}*={s}*{q}{s}*(?P<value>.+?){s}*{q}{s}*}}',
                   replacement_builder(logging),
                   md_file_content)
 
