@@ -14,7 +14,7 @@ def fix_sections(md_file_content, logging):
     # - users could mistakenly remove one dash
     # - users could mistakenly remove spaces around the tag
     md_file_content = re.sub(rf'---?{s}*(?P<tag>.+?){s}*---?',
-                             replacement_builder(logging, "--- {} ---"),
+                             replacement_builder(logging, "tag", "--- {} ---"),
                              md_file_content)
 
     # For some weird reason Crowdin jams 'hints' and 'hint' tags into one line it its output.
@@ -23,34 +23,22 @@ def fix_sections(md_file_content, logging):
     # So let's revert it back (also considering situations when translators mistakenly
     # modified those strings, for example translated them in target language
     md_file_content = re.sub(rf'--- (?P<tag>.+?) ---{s}+(?=--- .+? ---)',
-                             replacement_builder(logging, "--- {} ---\n"),
+                             replacement_builder(logging, "tag", "--- {} ---\n"),
                              md_file_content)
 
     # For some weird reason Crowdin breaks 'title' tags. So let's revert it back
     c = f"[{RegexConstants.COLONS}]"
     md_file_content = re.sub(rf'## --- collapse ---\n\n## (?P<tag>.+?){c}{s}*(?P<title>.+?)\n',
-                             replacement_builder_title(logging, "--- collapse ---\n---\ntitle: {}\n---\n"),
+                             replacement_builder(logging, "title", "--- collapse ---\n---\ntitle: {}\n---\n"),
                              md_file_content)
 
     return md_file_content
 
 
-def replacement_builder(logging, replacement_pattern):
+def replacement_builder(logging, group_to_extract, replacement_pattern):
     def internal_replacement_builder(matchobj):
         original_text = matchobj.group()
-        tag_name = matchobj.group("tag")
-
-        replacement_text = replacement_pattern.format(tag_name)
-        log_replacement(original_text, replacement_text, logging)
-        return replacement_text
-
-    return internal_replacement_builder
-
-
-def replacement_builder_title(logging, replacement_pattern):
-    def internal_replacement_builder(matchobj):
-        original_text = matchobj.group()
-        tag_name = matchobj.group("title")
+        tag_name = matchobj.group(group_to_extract)
 
         replacement_text = replacement_pattern.format(tag_name)
         log_replacement(original_text, replacement_text, logging)
