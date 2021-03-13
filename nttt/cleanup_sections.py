@@ -1,9 +1,9 @@
 import re
+import sys
 from .utilities import find_snippet
 from .nttt_logging import log_replacement
 
 
-# TODO think about logging of these replacements
 def fix_sections(md_file_content, logging):
     # For some weird reason Crowdin replaces '---' to '\---' in its output. So let's revert it back
     md_file_content = md_file_content.replace("\\---", "---")
@@ -11,8 +11,8 @@ def fix_sections(md_file_content, logging):
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
     # - users could mistakenly remove spaces around the tag
-    md_file_content = re.sub(r'---?\s*(?P<tag>.+?)\s*---?',
-                             r'--- \g<tag> ---',
+    md_file_content = re.sub(r'---?[ \t]*(?P<tag>.+?)[ \t]*---?',
+                             replacement_builder(logging, "--- {} ---"),
                              md_file_content)
 
     # For some weird reason Crowdin jams 'hints' and 'hint' tags into one line it its output.
@@ -20,8 +20,8 @@ def fix_sections(md_file_content, logging):
     # Probably because they go in adjacent lines (no empty line between them).
     # So let's revert it back (also considering situations when translators mistakenly
     # modified those strings, for example translated them in target language
-    md_file_content = re.sub(r'--- (?P<tag>.+?) ---\s+(?=--- .+? ---)',
-                             r'--- \g<tag> ---\n',
+    md_file_content = re.sub(r'--- (?P<tag>.+?) ---[ \t]+(?=--- .+? ---)',
+                             replacement_builder(logging, "--- {} ---\n"),
                              md_file_content)
 
     # For some weird reason Crowdin breaks 'title' tags. So let's revert it back
@@ -38,7 +38,19 @@ def fix_sections(md_file_content, logging):
     return md_file_content
 
 
-def fix_sections_translation(md_file_content, en_file_content, logging):
+def replacement_builder(logging, replacement_pattern):
+    def internal_replacement_builder(matchobj):
+        original_text = matchobj.group()
+        tag_name = matchobj.group("tag")
+
+        replacement_text = replacement_pattern.format(tag_name)
+        log_replacement(original_text, replacement_text, logging)
+        return replacement_text
+
+    return internal_replacement_builder
+
+
+def fix_sections_translation(md_file_name, md_file_content, en_file_content, logging):
     section_pattern = re.compile("--- (?P<tag>.+?) ---")
 
     md_file_lines = md_file_content.split('\n')
@@ -60,8 +72,8 @@ def fix_sections_translation(md_file_content, en_file_content, logging):
 
         return '\n'.join(md_file_lines)
     else:
-        # TODO think of better message. Maybe do logging?
-        print("Different section structure")
+        print("Warning ({}): Different section structure in the original (en) and the translated pages. "
+              "Reverting of translated section tags will not be performed".format(md_file_name), file=sys.stderr)
         return md_file_content
 
 
