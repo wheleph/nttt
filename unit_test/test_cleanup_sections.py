@@ -84,6 +84,26 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
+    # def test_fix_hints2(self):
+    #     c_initial = '\--- hints \--- \--- hint \--- ![screenshot](images/boat-levels-blocks.png) \--- /hint \--- \--- /hints \---'
+    #     c_target = ('--- hints ---\n'
+    #                 '--- hint ---\n'
+    #                 '![screenshot](images/boat-levels-blocks.png)\n'
+    #                 '--- /hint ---\n'
+    #                 '--- /hints ---')
+    #
+    #     self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
+    def test_tables(self):
+        """
+        Verify that markdown tables are not modified
+        """
+        c_initial = ('| C  | D  | E  | F  | G  | A  | B  |\n'
+                     '|:--:|:--:|:--:|:--:|:--:|:--:|:--:|\n'
+                     '| 60 | 62 | 64 | 65 | 67 | 69 | 71 |')
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_initial)
+
     def test_fix_task(self):
         c_initial = ('\\--- task \\--- \\--- hints \\--- \\--- hint \\---\n'
                      '\\--- /hint \\--- \\--- /hints \\--- \\--- /task \\---')
@@ -125,7 +145,6 @@ class TestCleanupSections(unittest.TestCase):
                     '\n'
                     '## Вступ:\n')
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
-
 
     def test_fix_translation_mismatch(self):
         c_initial = ('--- wenken ---\n'

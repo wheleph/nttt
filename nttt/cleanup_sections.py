@@ -9,11 +9,12 @@ def fix_sections(md_file_content, logging):
     md_file_content = md_file_content.replace("\\---", "---")
 
     s = f"[{RegexConstants.SPACES}]"
+    section_tag_name_regex = '[\\w\\-/]+'
 
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
     # - users could mistakenly remove spaces around the tag
-    md_file_content = re.sub(rf'---?{s}*(?P<tag>.+?){s}*---?',
+    md_file_content = re.sub(rf'---?{s}*(?P<tag>{section_tag_name_regex}?){s}*---?',
                              replacement_builder(logging, "tag", "--- {} ---"),
                              md_file_content)
 
@@ -22,7 +23,7 @@ def fix_sections(md_file_content, logging):
     # Probably because they go in adjacent lines (no empty line between them).
     # So let's revert it back (also considering situations when translators mistakenly
     # modified those strings, for example translated them in target language
-    md_file_content = re.sub(rf'--- (?P<tag>.+?) ---{s}+(?=--- .+? ---)',
+    md_file_content = re.sub(rf'--- (?P<tag>{section_tag_name_regex}?) ---{s}+(?=--- .+? ---)',
                              replacement_builder(logging, "tag", "--- {} ---\n"),
                              md_file_content)
 
