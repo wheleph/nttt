@@ -3,10 +3,10 @@ import os
 from setuptools import setup
 
 if sys.version_info[0] == 2:
-    raise ValueError('This package requires Python 3.3 or newer')
+    raise ValueError('This package requires Python 3.7 or newer')
 elif sys.version_info[0] == 3:
-    if not sys.version_info >= (3, 3):
-        raise ValueError('This package requires Python 3.3 or newer')
+    if not sys.version_info >= (3, 7):
+        raise ValueError('This package requires Python 3.7 or newer')
 else:
     raise ValueError('Unrecognized major version of Python')
 
@@ -33,5 +33,5 @@ if __name__ == '__main__':
           entry_points={
               'console_scripts': [
                   'nttt = nttt:main'
-                  ]},
+              ]},
           zip_safe=False)
