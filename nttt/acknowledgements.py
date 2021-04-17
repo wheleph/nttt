@@ -35,6 +35,9 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
     whether the volunteer acknowledgement was successfully added.
     '''
 
+    if logging == "on":
+        print("Using the volunteer acknowledgements from {}".format(csv_file_path))
+
     acknowledgement = get_volunteer_acknowledgement(csv_file_path, language)
     if acknowledgement is None:
         print("Could not find the volunteer acknowledgement for language {}".format(language),
