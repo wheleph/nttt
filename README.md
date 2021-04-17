@@ -144,3 +144,19 @@ examples of usage:
     "Volunteer Translator", "Volunteer Reviewer" and "Volunteer Tester".
     File step_7.md will be used as final step file.
 ```
+
+## Spreadsheets
+
+NTTT requires the volunteer acknowledgements spreadsheet (a Google Sheet) to be published as CSV file. This has to be done only once. Any changes in the spreadsheet will automatically appear in the published CSV file, although after a delay of at most 5 minutes:
+
+![google sheets](images/google_sheets.png)
+
+Use the following procedure to publish the volunteer acknowledgements spreadsheet (only the NEW sheet) in CSV format:
+1. Open the spreadsheet in Google Sheets.
+2. Select **File** > **Publish** to the web from the menu.
+3. Make sure **Link** is selected.
+4. Instead of **Entire Document**, select **NEW**.
+5. Instead of **Web Page**, select **Comma-separated values (.csv)**.
+6. Click the **Publish** button.
+7. Click **OK for** publishing this selection.
+8. Copy the resulting URL (the long string starting with https and ending with csv) and hand it over to the development team to include the URL in the code of NTTT.
