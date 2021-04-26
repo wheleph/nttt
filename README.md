@@ -4,6 +4,27 @@
 
 Note - NTTT will work on Windows, macOS and Linux.
 
+## Prerequisites
+
+The tool requires having Python 3.7 or newer. 
+Please ensure that you have a proper version of Python installed by issuing 
+`python3 --version` on command line.
+
+### Windows
+
+It's recommended to [download Python installer from python.org](https://www.python.org/downloads/) 
+rather than getting it from Microsoft Store. This is because the version from Microsoft Store 
+doesn't add [the location of scripts from Python packages](https://python-packaging.readthedocs.io/en/latest/command-line-scripts.html) 
+to the environment variable `PATH`. This leads to inconvenience because each time you'll want to run NTTT, you'll need to
+provide the full path to the installed binary including all directories rather than just typing `nttt`.
+
+If you choose to use installer from python.org then make sure to check "Add Python 3.x to PATH":
+![install_python](images/install_python.png)
+
+If you must use Python from Microsoft Store then please make sure to add the location of scripts from Python packages 
+(something like `C:\Users\wheleph\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\Scripts`) 
+to the environment variable `PATH` manually.
+
 ## Install
 
 To install NTTT, clone the repository and use `pip3` to install:
