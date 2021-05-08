@@ -38,7 +38,7 @@ In the window that pops up, select the *Change system locale...* button:
 ![administrative](images/administrative.png)
 
 Finally, tick the checkbox Beta: Use Unicode UTF-8 for worldwide language support:
-![UTF-8](images/UTF8.png)
+![UTF-8](images/UTF-8.png)
 
 ## Install
 
