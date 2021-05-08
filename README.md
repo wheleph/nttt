@@ -32,13 +32,13 @@ For other languages, UTF-8 support may have to be enabled.
 This is only avaliable on newer version of Windows 10. Windows 7, 8 and 8.1 do not support this. 
 To enable UTF-8 support in the Command Prompt, open the Settings, select Time & Language and 
 open the Language section. Scroll down and select the __Administrative language settings__ link:
-[!language](images/language.png)
+![language](images/language.png)
 
 In the window that pops up, select the *Change system locale...* button:
-[!administrative](images/administrative.png)
+![administrative](images/administrative.png)
 
 Finally, tick the checkbox Beta: Use Unicode UTF-8 for worldwide language support:
-[!UTF-8](images/UTF8.png)
+![UTF-8](images/UTF8.png)
 
 ## Install
 
