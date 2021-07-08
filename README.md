@@ -28,8 +28,11 @@ to the environment variable `PATH` manually.
 ### UTF-8 support on Windows
 
 The Command Prompt on Windows only supports the character sets for Western languages. 
+As a result you may see that non-latin symbols are replaced by "?":
+![UTF-8-error](images/UTF-8-error.png)
+
 For other languages, UTF-8 support may have to be enabled. 
-This is only avaliable on newer version of Windows 10. Windows 7, 8 and 8.1 do not support this. 
+This is only available on newer version of Windows 10. Windows 7, 8 and 8.1 do not support this. 
 To enable UTF-8 support in the Command Prompt, open the Settings, select Time & Language and 
 open the Language section. Scroll down and select the __Administrative language settings__ link:
 ![language](images/language.png)
