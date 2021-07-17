@@ -5,7 +5,7 @@ pattern_blank = re.compile(r'^_\s+blank$')
 
 
 def trim_formatting_tags(md_file_content, logging):
-    return re.sub(r'(?P<last_word>\S+?)\s*{\s*[:：]\s*(?P<tag>[\w]+?)\s*=\s*["”]\s*(?P<value>.+?)\s*["”]\s*}',
+    return re.sub(r'(?P<last_word>\S+?)\s*{\s*[:：]\s*(?P<tag>[\w]+?)\s*=\s*["”“]\s*(?P<value>.+?)\s*["”“]\s*}',
                   replacement_builder(logging),
                   md_file_content)
 

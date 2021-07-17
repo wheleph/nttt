@@ -55,6 +55,12 @@ class TestCleanupFormatting(unittest.TestCase):
 
         self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
 
+    def test_fix_quotes2(self):
+        init = '`por siempre`{:class=“block3control"}'
+        out = '`por siempre`{:class="block3control"}'
+
+        self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
+
     def test_fix_colon(self):
         init = '<0>trinket.io</0>{：target = "_ blank"}'
         out = '<0>trinket.io</0>{:target="_blank"}'
