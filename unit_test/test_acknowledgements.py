@@ -118,6 +118,7 @@ class TestAcknowledgements(unittest.TestCase):
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
             expected_contents = '\n'.join(["",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
@@ -154,6 +155,7 @@ class TestAcknowledgements(unittest.TestCase):
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
             expected_contents = '\n'.join(["",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
@@ -187,6 +189,7 @@ class TestAcknowledgements(unittest.TestCase):
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
             expected_contents = '\n'.join(["",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
@@ -228,6 +231,7 @@ class TestAcknowledgements(unittest.TestCase):
             expected_contents = '\n'.join(["Line One.",
                                            "Line 2,",
                                            "line three.",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
@@ -261,6 +265,7 @@ class TestAcknowledgements(unittest.TestCase):
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
             expected_contents = '\n'.join(["This is the end.",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
@@ -294,6 +299,7 @@ class TestAcknowledgements(unittest.TestCase):
             # Check contents of final_step.md.
             contents = output_file_path.read_text()
             expected_contents = '\n'.join(["",
+                                           "",
                                            "***",
                                            self.FIRST_LINE,
                                            "",
