@@ -73,6 +73,6 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
     # Strip trailings blanks (spaces, tabs, newlines) from the original content
     # before appending the volunteer acknowledgement. This avoids a surplus of
     # empty lines between the content and the volunteer acknowledgement.
-    content = content.rstrip() + "\n***\n" + acknowledgement + "\n"
+    content = content.rstrip() + "\n\n***\n" + acknowledgement + "\n"
     save_file(output_file_path, content, suggested_eol)
     return True
