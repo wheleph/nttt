@@ -63,7 +63,7 @@ def add_volunteer_acknowledgement(csv_file_path, output_file_path, language,
     if len(volunteers) == 0:
         print("Warning: No volunteer name(s) given - please add them manually")
     else:
-        volunteer_names = '\n\n'.join(volunteers) + '\n'
+        volunteer_names = '\n'.join(volunteers) + '\n'
         acknowledgement = acknowledgement.replace(name_placeholders,
                                                   volunteer_names)
     if logging == "on":
