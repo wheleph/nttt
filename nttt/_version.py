@@ -1,2 +1,2 @@
 # The approach is taken from https://packaging.python.org/guides/single-sourcing-package-version/
-__version__ = "0.4.2"
+__version__ = "0.4.3-SNAPSHOT"
