@@ -84,15 +84,15 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
-    # def test_fix_hints2(self):
-    #     c_initial = '\--- hints \--- \--- hint \--- ![screenshot](images/boat-levels-blocks.png) \--- /hint \--- \--- /hints \---'
-    #     c_target = ('--- hints ---\n'
-    #                 '--- hint ---\n'
-    #                 '![screenshot](images/boat-levels-blocks.png)\n'
-    #                 '--- /hint ---\n'
-    #                 '--- /hints ---')
-    #
-    #     self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+    def test_fix_hints2(self):
+        c_initial = '\--- hints \--- \--- hint \--- ![screenshot](images/boat-levels-blocks.png) \--- /hint \--- \--- /hints \---'
+        c_target = ('--- hints ---\n'
+                    '--- hint ---\n'
+                    '![screenshot](images/boat-levels-blocks.png)\n'
+                    '--- /hint ---\n'
+                    '--- /hints ---')
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
     def test_tables(self):
         """
