@@ -9,7 +9,7 @@ def fix_sections(md_file_content, logging):
     md_file_content = md_file_content.replace("\\---", "---")
 
     s = f"[{RegexConstants.SPACES}]"
-    section_tag_name_regex = '[\\w\\-/]+'
+    section_tag_name_regex = '/?\\w+(?:\\-\\w+)*'
 
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
@@ -52,7 +52,7 @@ def revert_section_translation(md_file_name, md_file_content, en_file_content, l
     """
     Compares translated file to the original one
     and reverts translated section tags ("--- opdracht ---" -> "--- task ---").
-    This happens if both orignal file and the translated one contain the same number of those tags
+    This happens if both the original file and the translated one contain the same number of those tags
     """
     section_pattern = re.compile("--- (?P<tag>.+?) ---")
 

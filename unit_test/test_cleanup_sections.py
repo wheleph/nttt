@@ -104,6 +104,16 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_initial)
 
+    def test_tables2(self):
+        """
+        Verify that markdown tables are not modified
+        """
+        c_initial = ('| C (Do) | D (Re) | E (Mi) | F (Fa) | G (Sol) | A (La) | B (Si) |\n'
+                     '|:------:|:------:|:------:|:------:|:-------:|:------:|:------:|\n'
+                     '|   60   |   62   |   64   |   65   |   67    |   69   |   71   |')
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_initial)
+
     def test_fix_task(self):
         c_initial = ('\\--- task \\--- \\--- hints \\--- \\--- hint \\---\n'
                      '\\--- /hint \\--- \\--- /hints \\--- \\--- /task \\---')
