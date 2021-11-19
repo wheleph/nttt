@@ -26,7 +26,7 @@ def fix_sections(md_file_content, logging):
     md_file_content = re.sub(rf'--- (?P<tag>{section_tag_name_regex}?) ---{s}+(?=.+)',
                              replacement_builder(logging, ["tag"], "--- {} ---\n"),
                              md_file_content)
-    md_file_content = re.sub(rf'(?P<content>.+?){s}+--- (?P<tag>{section_tag_name_regex}?) ---',
+    md_file_content = re.sub(rf'(?P<content>\S+?){s}+--- (?P<tag>{section_tag_name_regex}?) ---',
                              replacement_builder(logging, ["content", "tag"], "{}\n--- {} ---"),
                              md_file_content)
 

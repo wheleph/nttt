@@ -126,6 +126,24 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
+    def test_fix_nested_feedback(self):
+        c_initial = (
+            '--- choices ---\n'
+            '\n'
+            '- ( ) Onmiddellijk zodra je op de groene vlag klikt\n'
+            '\n'
+            '  --- feedback ---\n'
+            '\n'
+            'De code heeft een klokblok voordat de bus wegglijdt.\n'
+            '\n'
+            '  --- /feedback ---\n'
+            '\n'
+            '--- /choices ---\n'
+        )
+        c_target = c_initial
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
     def test_fix_title(self):
         c_initial = ('## \\--- collapse \\---\n'
                      '\n'
