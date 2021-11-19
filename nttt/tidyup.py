@@ -79,7 +79,7 @@ def fix_md_step(src, lang, english_src, dst, disable, logging):
 
 
 def tidyup_translations(arguments):
-    folder = arguments[ArgumentKeyConstants.INPUT]
+    input_folder = arguments[ArgumentKeyConstants.INPUT]
     output_folder = arguments[ArgumentKeyConstants.OUTPUT]
     english_folder = arguments[ArgumentKeyConstants.ENGLISH]
     language = arguments[ArgumentKeyConstants.LANGUAGE]
@@ -90,20 +90,20 @@ def tidyup_translations(arguments):
 
     # get files to update
     print("Find files ...")
-    files_to_update = find_files(folder, file_names=[GeneralConstants.FILE_NAME_META_YML], extensions=[".md"])
+    files_to_update = find_files(input_folder, file_names=[GeneralConstants.FILE_NAME_META_YML], extensions=[".md"])
 
     if len(files_to_update) > 0:
         print("About to tidy up files:")
         for file in files_to_update:
-            print(" - {}".format(os.path.basename(file)))
+            print(" - {}".format(os.path.relpath(file, input_folder)))
 
         process_yn = input("Continue (y/n):")
         if process_yn.casefold() == "y":
 
             for source_file_path in files_to_update:
-                file_name = os.path.basename(source_file_path)
+                relative_input_file_name = os.path.relpath(source_file_path, input_folder)
 
-                output_file_path = os.path.join(output_folder, file_name)
+                output_file_path = os.path.join(output_folder, relative_input_file_name)
 
                 # create output folder
                 output_file_folder = os.path.dirname(output_file_path)
@@ -111,9 +111,9 @@ def tidyup_translations(arguments):
                 if not os.path.exists(output_file_folder):
                     os.makedirs(output_file_folder)
 
-                print("Fixing - {}".format(file_name))
-                en_file_path = os.path.join(english_folder, file_name)
-                if file_name == GeneralConstants.FILE_NAME_META_YML:
+                print("Fixing - {}".format(relative_input_file_name))
+                en_file_path = os.path.join(english_folder, relative_input_file_name)
+                if relative_input_file_name == GeneralConstants.FILE_NAME_META_YML:
                     fix_meta(source_file_path, en_file_path, output_file_path)
                 else:
                     fix_md_step(source_file_path, language, en_file_path, output_file_path, disable, logging)
@@ -129,7 +129,7 @@ def tidyup_translations(arguments):
             print("Complete")
 
     else:
-        print("No files found in '{}'".format(folder))
+        print("No files found in '{}'".format(input_folder))
 
     # add files and folders missing in the output folder
-    add_missing_entries(folder, english_folder, output_folder)
+    add_missing_entries(input_folder, english_folder, output_folder)
