@@ -15,23 +15,6 @@ def save_file(file_name, content, suggested_eol):
         f.write(content)
 
 
-def find_snippet(s, start_string, end_string):
-    start_pos = s.find(start_string)
-    if start_pos > -1:
-        start_of_snippet = start_pos + len(start_string)
-        end_pos = s.find(end_string, start_of_snippet)
-        return s[start_of_snippet:end_pos]
-    else:
-        return None
-
-def find_replace(src, dst, find, replace):
-    with open(src, encoding='utf-8') as f:
-        s = f.read()
-    (_, suggested_eol) = eol.eol_info_from_path(src)
-    s = s.replace(find, replace)
-    with open(dst, encoding='utf-8', mode="w", newline=suggested_eol) as f:
-        f.write(s)
-
 def find_files(src, file_names=[], extensions=[]):
     files_found = []
 
@@ -58,7 +41,7 @@ def find_files(src, file_names=[], extensions=[]):
             if valid_file:
                 files_found.append(fpath)
 
-    return files_found
+    return sorted(files_found)
 
 
 def find_missing_entries(source_folder, dest_folder):

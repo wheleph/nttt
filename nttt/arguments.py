@@ -50,7 +50,13 @@ def parse_command_line(version):
     parser.add_argument("-l", "--language",   help="The language of the content to be tidied up, defaults to basename(INPUT).")
     parser.add_argument("-v", "--volunteers", help="The list of volunteers as a comma separated list, defaults to an empty list.")
     parser.add_argument("-f", "--final",      help="The number of the final step file, defaults to the step file with the highest number.")
-    parser.add_argument("-D", "--Disable",    help="The risky features to be disabled, separated by comma. Options are fix_md,fix_html. Defaults to all risky features to be enabled.")
+    parser.add_argument("-D", "--Disable",    help="The risky features to be disabled, separated by commas. "
+                                                   "Options are: fix_md (fix common markdown-related issues), "
+                                                   "fix_html (fix common issues in HTML-like tags (<kbd>Return</kbd>)), "
+                                                   "fix_sections (fix common issues in section tags (--- hint ---)), "
+                                                   "revert_section_translation (revert translation for section tags), "
+                                                   "fix_formatting (fix common issues in formatting tags ({:class=\"block3motion\"})). "
+                                                   "Defaults to all risky features to be enabled.")
     parser.add_argument("-L", "--Logging",    help="Logging of modifications. Options are on and off. Default is off.")
     return parser.parse_args()
 
