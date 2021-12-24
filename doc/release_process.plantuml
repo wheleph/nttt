@@ -3,14 +3,13 @@ start
 
 repeat
 
-:development
-(one or several tickets
-from the board are implemented
-and merged to //improvements//);
+  :development
+  (one or several tickets
+  from the board are implemented
+  and merged to //improvements//);
 
-repeat
   :branch //improvements//
-  is ready for release;
+  is ready for developer testing;
 
   note right
     //nttt/_version.py// has version //a.b.c-SNAPSHOT//
@@ -29,13 +28,6 @@ repeat
 
   :increment version in //improvements//:
   put //x.y.z-SNAPSHOT// in //nttt/_version.py//;
-
-  :customer testing of
-  release //va.b.c//;
-
-  backward: fix the bugs in //improvements//;
-repeat while (bugs found?) is (yes)
-->no;
 
 repeat while
 
