@@ -61,6 +61,12 @@ class TestCleanupFormatting(unittest.TestCase):
 
         self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
 
+    def test_fix_quotes3(self):
+        init = '`text`{: class = « block3looks »}'
+        out = '`text`{:class="block3looks"}'
+
+        self.assertEqual(cleanup_formatting.trim_formatting_tags(init, self.logging), out)
+
     def test_fix_colon(self):
         init = '<0>trinket.io</0>{：target = "_ blank"}'
         out = '<0>trinket.io</0>{:target="_blank"}'
