@@ -1,6 +1,7 @@
 from .constants import ArgumentKeyConstants
 import os
 from pathlib import Path
+from argparse import ArgumentParser
 
 
 def get_absolute_path(folder):
@@ -37,11 +38,11 @@ def get_final_step(folder):
 
 
 def parse_command_line(version):
-    '''
+    """
     Parses the command line and returns the arguments provided on command line.
-    '''
-
-    from argparse import ArgumentParser
+    The convention is to begin functional flag names with a small letter
+    and non-functional flag names with a capital letter
+    """
 
     parser = ArgumentParser(description="Nina's Translation Tidyup Tool v{}".format(version))
     parser.add_argument("-i", "--input",      help="The input directory which contains the content to tidy up, defaults to the current directory.")
