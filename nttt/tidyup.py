@@ -99,7 +99,7 @@ def tidyup_translations(arguments):
             print(" - {}".format(os.path.relpath(file, input_folder)))
 
         continue_with_cleanup = True
-        if yes == 'off':
+        if yes != 'on':
             process_yn = input("Continue (y/n):")
             continue_with_cleanup = (process_yn.casefold() == "y")
 
