@@ -16,7 +16,7 @@ class ArgumentKeyConstants:
     FINAL = 'FINAL'
     DISABLE = 'DISABLE'
     LOGGING = 'LOGGING'
-    SILENT = 'SILENT'
+    YES = 'YES'
 
 
 class RegexConstants:

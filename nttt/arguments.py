@@ -58,8 +58,8 @@ def parse_command_line(version):
                                                    "fix_formatting (fix common issues in formatting tags ({:class=\"block3motion\"})). "
                                                    "Defaults to all risky features to be enabled.")
     parser.add_argument("-L", "--Logging",    help="Logging of modifications. Options are on and off. Default is off.")
-    parser.add_argument("-S", "--Silent",     help="Enables or disables the silent mode. "
-                                                   "In silent mode the tool runs without prompting users for confirmations. "
+    parser.add_argument("-Y", "--Yes",        help="Automatic yes to prompts. "
+                                                   "If enabled assume 'yes' as answer to all prompts and run non-interactively. "
                                                    "Options are on and off. Default is off.")
     return parser.parse_args()
 
@@ -114,10 +114,10 @@ def resolve_arguments(command_line_args):
     else:
         arguments[ArgumentKeyConstants.LOGGING] = "off"
 
-    if command_line_args.Silent:
-        arguments[ArgumentKeyConstants.SILENT] = command_line_args.Silent
+    if command_line_args.Yes:
+        arguments[ArgumentKeyConstants.YES] = command_line_args.Yes
     else:
-        arguments[ArgumentKeyConstants.SILENT] = "off"
+        arguments[ArgumentKeyConstants.YES] = "off"
 
     return arguments
 
@@ -136,7 +136,7 @@ def show_arguments(arguments):
     print("Final step - '{}'".format(arguments[ArgumentKeyConstants.FINAL]))
     print("Disabled functions - '{}'".format(arguments[ArgumentKeyConstants.DISABLE]))
     print("Logging - '{}'".format(arguments[ArgumentKeyConstants.LOGGING]))
-    print("Silent - '{}'".format(arguments[ArgumentKeyConstants.SILENT]))
+    print("Yes - '{}'".format(arguments[ArgumentKeyConstants.YES]))
 
 
 def check_folder(folder):

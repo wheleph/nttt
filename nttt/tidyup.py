@@ -87,19 +87,19 @@ def tidyup_translations(arguments):
     logging = arguments[ArgumentKeyConstants.LOGGING]
     volunteers = arguments[ArgumentKeyConstants.VOLUNTEERS]
     final_step = arguments[ArgumentKeyConstants.FINAL]
-    silent = arguments[ArgumentKeyConstants.SILENT]
+    yes = arguments[ArgumentKeyConstants.YES]
 
     # get files to update
     print("Find files ...")
     files_to_update = find_files(input_folder, file_names=[GeneralConstants.FILE_NAME_META_YML], extensions=[".md"])
 
     if len(files_to_update) > 0:
-        continue_with_cleanup = True
-        if silent == 'off':
-            print("About to tidy up files:")
-            for file in files_to_update:
-                print(" - {}".format(os.path.relpath(file, input_folder)))
+        print("About to tidy up files:")
+        for file in files_to_update:
+            print(" - {}".format(os.path.relpath(file, input_folder)))
 
+        continue_with_cleanup = True
+        if yes == 'off':
             process_yn = input("Continue (y/n):")
             continue_with_cleanup = (process_yn.casefold() == "y")
 
