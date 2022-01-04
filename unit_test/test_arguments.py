@@ -58,7 +58,7 @@ class TestArguments(unittest.TestCase):
                 self.final = False
                 self.Disable = False
                 self.Logging = False
-                self.Silent = False
+                self.Yes = False
 
         # Using the os.chdir function for a subdirectory of a directory created
         # with TemporaryDirectory doesn't work on Windows and macOS. Therefore,
@@ -84,7 +84,7 @@ class TestArguments(unittest.TestCase):
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.FINAL], 0)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.DISABLE], [])
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.LOGGING], "off")
-        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.SILENT], "off")
+        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.YES], "off")
 
         input_folder = Path(data_folder, "da-DK")
         output_folder = Path(data_folder, "output")
@@ -100,7 +100,7 @@ class TestArguments(unittest.TestCase):
         command_line_args.final = 5
         command_line_args.Disable = "fix_md,fix_html"
         command_line_args.Logging = "on"
-        command_line_args.Silent = "on"
+        command_line_args.Yes = "on"
         arguments = nttt.arguments.resolve_arguments(command_line_args)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.INPUT], input_folder)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.OUTPUT], output_folder)
@@ -110,7 +110,7 @@ class TestArguments(unittest.TestCase):
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.FINAL], 5)
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.DISABLE], ["fix_md", "fix_html"])
         self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.LOGGING], "on")
-        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.SILENT], "on")
+        self.assertEqual(arguments[nttt.arguments.ArgumentKeyConstants.YES], "on")
 
     def test_check_folder(self):
         ''' Test case for the check_folder function:
