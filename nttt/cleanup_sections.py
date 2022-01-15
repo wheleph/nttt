@@ -4,12 +4,14 @@ from .nttt_logging import log_replacement
 from .constants import RegexConstants
 
 
+section_tag_name_regex = '/?\\w+(?:\\-\\w+)*'
+
+
 def fix_sections(md_file_content, logging):
     # For some weird reason Crowdin replaces '---' to '\---' in its output. So let's revert it back
     md_file_content = md_file_content.replace("\\---", "---")
 
     s = f"[{RegexConstants.SPACES}]"
-    section_tag_name_regex = '/?\\w+(?:\\-\\w+)*'
 
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
@@ -28,6 +30,11 @@ def fix_sections(md_file_content, logging):
                              md_file_content)
     md_file_content = re.sub(rf'(?P<content>\S+?){s}+--- (?P<tag>{section_tag_name_regex}?) ---',
                              replacement_builder(logging, ["content", "tag"], "{}\n--- {} ---"),
+                             md_file_content)
+
+    # Removes any possible spaces between '/' and tag name in closing tags
+    md_file_content = re.sub(rf'--- /{s}+(?P<tag>{section_tag_name_regex}?) ---',
+                             replacement_builder(logging, ["tag"], "--- /{} ---"),
                              md_file_content)
 
     # For some weird reason Crowdin breaks 'title' tags. So let's revert it back
@@ -57,7 +64,7 @@ def revert_section_translation(md_file_name, md_file_content, en_file_content, l
     and reverts translated section tags ("--- opdracht ---" -> "--- task ---").
     This happens if both the original file and the translated one contain the same number of those tags
     """
-    section_pattern = re.compile("--- (?P<tag>.+?) ---")
+    section_pattern = re.compile(rf'--- (?P<tag>{section_tag_name_regex}?) ---')
 
     md_file_lines = md_file_content.split('\n')
     md_file_section_dict = extract_sections(md_file_lines, section_pattern)

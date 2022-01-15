@@ -281,6 +281,21 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.revert_section_translation("step_1.md", c_initial, c_original, self.logging), c_target)
 
+    def test_fix_space_after_slash(self):
+        c_initial = ("\\--- task \\---\n"
+                     "\n"
+                     "Wat gebeurt er als de boot de muisaanwijzer bereikt? Probeer het uit om te zien wat het probleem is.\n"
+                     "\n"
+                     "\\--- /  task \\---")
+
+        c_target = ("--- task ---\n"
+                    "\n"
+                    "Wat gebeurt er als de boot de muisaanwijzer bereikt? Probeer het uit om te zien wat het probleem is.\n"
+                    "\n"
+                    "--- /task ---")
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
 
 if __name__ == '__main__':
     unittest.main()
