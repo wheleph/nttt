@@ -296,6 +296,15 @@ class TestCleanupSections(unittest.TestCase):
 
         self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
 
+    def test_tag_with_dash(self):
+        c_initial = (r"\--- print-only \--- ![screenshot of finished game](images/memory-screenshot.png) \--- /print-only \---")
+
+        c_target = ("--- print-only ---\n"
+                    "![screenshot of finished game](images/memory-screenshot.png)\n"
+                    "--- /print-only ---")
+
+        self.assertEqual(cleanup_sections.fix_sections(c_initial, self.logging), c_target)
+
 
 if __name__ == '__main__':
     unittest.main()
