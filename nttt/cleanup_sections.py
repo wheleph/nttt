@@ -4,18 +4,25 @@ from .nttt_logging import log_replacement
 from .constants import RegexConstants
 
 
+section_tag_name_regex = f'/?\\w+(?:[\\-{RegexConstants.SPACES}]\\w+)*'
+
+
 def fix_sections(md_file_content, logging):
     # For some weird reason Crowdin replaces '---' to '\---' in its output. So let's revert it back
     md_file_content = md_file_content.replace("\\---", "---")
 
     s = f"[{RegexConstants.SPACES}]"
-    section_tag_name_regex = '/?\\w+(?:\\-\\w+)*'
 
     # Fixes 2 issues:
     # - users could mistakenly remove one dash
     # - users could mistakenly remove spaces around the tag
     md_file_content = re.sub(rf'---?{s}*(?P<tag>{section_tag_name_regex}?){s}*---?',
                              replacement_builder(logging, ["tag"], "--- {} ---"),
+                             md_file_content)
+
+    # Removes any possible spaces between '/' and tag name in closing tags
+    md_file_content = re.sub(rf'--- /{s}+(?P<tag>{section_tag_name_regex}?) ---',
+                             replacement_builder(logging, ["tag"], "--- /{} ---"),
                              md_file_content)
 
     # For some weird reason Crowdin jams 'hints' and 'hint' tags into one line it its output.

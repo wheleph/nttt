@@ -28,7 +28,7 @@ def fix_meta(src, english_src, dst):
 def revert_untranslatable_meta_elements(content, english_content):
     yaml_parser = ruamel.yaml.YAML(typ='rt')
     yaml_parser.preserve_quotes = True
-    # Disable timestamp parsing. If enabled it may lead to unwanted errors when the a date is invalid.
+    # Disable timestamp parsing. If enabled it may lead to unwanted errors when the date is invalid.
     # Beware that this approach relies on not documented features. Some details:
     # https://stackoverflow.com/questions/50900727/skip-converting-entities-while-loading-a-yaml-string-using-pyyaml
     yaml_parser.constructor.yaml_constructors.pop(u'tag:yaml.org,2002:timestamp', None)
