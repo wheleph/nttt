@@ -199,3 +199,13 @@ Use the following procedure to publish the volunteer acknowledgements spreadshee
 6. Click the **Publish** button.
 7. Click **OK for** publishing this selection.
 8. Copy the resulting URL (the long string starting with https and ending with csv) and hand it over to the development team to include the URL in the code of NTTT.
+
+# Contributors
+
+A massive thanks to the community contributors who spent time updating and improving this tool, you took what we had and ran with it.
+
+<a href = "https://github.com/raspberrypilearning/nttt/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=raspberrypilearning/nttt"/>
+</a>
+
+Made with [contributors-img](https://contrib.rocks).
