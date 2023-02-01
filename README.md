@@ -43,7 +43,12 @@ In the window that pops up, select the *Change system locale...* button:
 Finally, tick the checkbox Beta: Use Unicode UTF-8 for worldwide language support:
 ![UTF-8](images/UTF-8.png)
 
-## Install
+## Deploying
+
+Deploying this package occurs automatically when a Github release is created. This utilises Github Actions and performs an install using [setup.py](./setup.py). One key thing to note is that the dependencies for a deployment come from the `install_requires` in the `setup.py` file NOT from the `requirements.txt` file.
+
+
+## Install (development only)
 
 To install NTTT, clone the repository and use `pip3` to install:
 
@@ -61,6 +66,17 @@ You can uninstall nttt using:
 ```bash
 pip3 uninstall nttt
 ```
+
+## Install (PyPi)
+
+To install a deployed version of nttt all you need to do is run:
+
+```bash
+pip3 install nttt
+```
+
+if you've previously installed nttt (either for development or for release) you may need to use the following flags too `--upgrade` and/or `--force-reinstall`.
+
 
 ## Usage
 
@@ -99,6 +115,7 @@ Nina's Translation Tidyup Tool
 
 optional arguments:
   -h, --help            Show this help message and exit.
+  -Y YES, --Yes         Automatic yes to prompts.
   -i INPUT, --input INPUT
                         The input directory which contains the content to tidy
                         up, defaults to the current folder.
