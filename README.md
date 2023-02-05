@@ -1,3 +1,5 @@
+# All code from this repository has been backported to [raspberrypilearning/nttt](https://github.com/raspberrypilearning/nttt)
+
 # NTTT
 
 "Nina's Translation Tidy-up Tool"
